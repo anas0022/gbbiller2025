@@ -11,8 +11,8 @@
 
 </head>
 <body>
-<div class="container">
-  <div class="login-box">
+<div class="container ">
+  <div class="login-box ">
 <img src="http://127.0.0.1:8000/images/Group 11(3).png" 
      alt="Logo" 
      class="avatar" 
@@ -34,12 +34,12 @@
           type="text" 
          
         
-          required 
+           
            
          
         >
         <label>Biller Code</label>
-        <span class="error-message" id="error-biller_code" style="color:red; font-size:0.9em;"></span>
+        <span class="error-message" id="error-biller_code" style="color:red; font-size:0.9em; width:100%; display:flex; justify-content:start;"></span>
       </div>
 
       {{-- Password --}}
@@ -49,11 +49,11 @@
           id="password" 
           name="password" 
           type="password" 
-          required 
+           
           minlength="6"
         >
         <label>Password</label>
-        <span class="error-message" id="error-password" style="color:red; font-size:0.9em;"></span>
+        <span class="error-message" id="error-password" style="color:red; font-size:0.9em; width:100%; display:flex; justify-content:start;"></span>
       </div>
 
       {{-- Forgot Password --}}
