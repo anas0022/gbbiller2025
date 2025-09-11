@@ -14,14 +14,19 @@
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Pe-icon-7-stroke/1.2.3/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
+
 </head>
 <body>
 <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
-<div class="app-header header-shadow" style="background: #192A5C; !important;">
+<div class="app-header header-shadow" >
 <div class="app-header__logo" >
-<div class="logo-src">
+<div class="logo-src" style="height:auto;">
    {{--  <img src="{{ asset('images/GB_logo.png') }}" alt="Logo" width="50%"> --}}
-<img src="{{ asset('images/Group 11(3).png') }}" alt="Logo" width="50%" >
+<img src="http://127.0.0.1:8000/images/Group 11(3).png" 
+     alt="Logo" 
+    
+     style="filter: invert(1) brightness(0); width:50px;" >
 </div>
 <div class="header__pane ml-auto">
 <div>

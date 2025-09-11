@@ -5,16 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'My Laravel App')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
- 
+
 
 </head>
+<style>
+    .preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100% !important;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        opacity: 1;
+    }
+    .loader video {
+        width: 150px;
+        height: 150px;
+    }
+    .preloader.fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+    .vertical-nav-menu i.metismenu-state-icon {
+
+  font-size: 20px;
+}
+</style>
 <body>
+    <div class="preloader">
+        <div class="loader">
+            <video 
+    src="{{ asset('images/preloader/preloader.mp4') }}" 
+    autoplay 
+    loop 
+    muted 
+    playsinline
+    preload="auto"
+    style="width: 100px; height: 100px; display: block; margin: 0 auto;">
+</video>
+
+        </div>
+    </div>
     
-    <style>
-    .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
-            background: #fff !important;
-        }
-        </style>
+
 
 <div class="modal" tabindex="-1" role="dialog" id="time-error-modal" >
   <div class="modal-dialog" role="document">
@@ -107,6 +144,15 @@ window.addEventListener('pageshow', function (event) {
         window.location.reload();
     }
 });
+window.addEventListener('load', function() {
+    var preloader = document.querySelector('.preloader');
+    preloader.classList.add('fade-out');
+
+    setTimeout(function() {
+        preloader.style.display = 'none';
+    }, 500); // match the CSS transition duration
+});
+
 </script>
 
 

@@ -13,7 +13,11 @@
 <body>
 <div class="container">
   <div class="login-box">
-    <img src="{{ asset('images/Group 11(3).png')}}" alt="Logo" class="avatar">
+<img src="http://127.0.0.1:8000/images/Group 11(3).png" 
+     alt="Logo" 
+     class="avatar" 
+     style="filter: invert(1) brightness(0);">
+
 
     {{-- General Errors --}}
     <div id="general-errors" style="color: red; margin-bottom: 10px;"></div>
