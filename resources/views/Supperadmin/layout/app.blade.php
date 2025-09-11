@@ -48,7 +48,7 @@
 
 <script>
 let timer;
-let logoutTime = 10 * 1000; // 10 seconds for quick testing
+let logoutTime = 2 * 60 * 1000; // 2 minutes
 
 function resetTimer() {
     clearTimeout(timer);
