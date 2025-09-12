@@ -1,0 +1,82 @@
+.btn-actions-pane-right {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+}
+.btn-actions-pane-right .nav {
+    width: 50%;
+    gap: 5px;
+}
+    th,tr,td{
+        text-align: center !important;
+    }
+  .gradient-icon {
+        /* Optional styling for icons */
+        font-size: 18px;
+    }
+    input[type="checkbox"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	cursor: pointer;
+	outline: none;
+	width: 55px;
+  height: 35px;
+	background-color: rgb(232, 42, 42);
+	/* -webkit-transform: skewX(-7deg);
+	-ms-transform: skewX(-7deg);
+ */
+	-webkit-transition: 0.3s;
+	-o-transition: 0.3s;
+	transition: 0.3s;
+    border-radius: 5px;
+   
+}
+input[type="checkbox"]:before {
+	font-size: 10px;
+	content: "OFF";
+	position: relative;
+    left: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+	width: 25px;
+	height: 25px;
+	color: rgb(0, 0, 0);
+    background-color: #ffffff;
+	/* top: 0.42em;
+	left: 0.42em; */
+	-webkit-transition: 0.3s;
+	-o-transition: 0.3s;
+	transition: 0.3s;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	font-family: "Poppins", sans-serif;
+	font-weight: 600;
+	letter-spacing: 1px;
+}
+input[type="checkbox"]:checked {
+    background-color: rgb(6, 196, 6);
+    	width: 55px;
+  height: 35px;
+}
+input[type="checkbox"]:checked:before {
+	content: "ON";
+	left: 3.1em;
+	
+}
+div.dataTables_wrapper div.dataTables_length select {
+    width: 40px;
+}

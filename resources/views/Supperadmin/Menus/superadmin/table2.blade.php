@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-sm-12">
             <table style="width: 100%;" id=""
-                class="table table-hover table-striped table-bordered dataTable dtr-inline module-table" role="grid">
+                class="table table-hover table-striped table-bordered dataTable dtr-inline menu-table" role="grid">
                 <thead>
                     <tr>
                         <th>Icon</th>
@@ -25,7 +25,7 @@
 $(document).ready(function(){
 
     // Initialize DataTable first
-    var table = $('.module-table').DataTable({
+    var table = $('.menu-table').DataTable({
         responsive: true,
         columns: [
             { data: 'icon', orderable: false },

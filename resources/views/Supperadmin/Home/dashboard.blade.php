@@ -5,7 +5,3 @@
 @section('content')
 
 @endsection
-
-
-
- #192A5C;

@@ -1,10 +1,11 @@
+<!-- jQuery and DataTables CDN -->
 
 
 <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4" style="margin-top: 10px;">
     <div class="row">
         <div class="col-sm-12">
             <table style="width: 100%;" id=""
-                class="table table-hover table-striped table-bordered dataTable dtr-inline module-table" role="grid">
+                class="table table-hover table-striped table-bordered dataTable dtr-inline submenu-table" role="grid">
                 <thead>
                     <tr>
                         <th>Icon</th>
@@ -25,12 +26,12 @@
 $(document).ready(function(){
 
     // Initialize DataTable first
-    var table = $('.module-table').DataTable({
+    var table = $('.submenu-table').DataTable({
         responsive: true,
         columns: [
             { data: 'icon', orderable: false },
             { data: 'modulename' },
-            { data: 'status', orderable: false },
+            { data: 'status' },
             { data: 'action', orderable: false }
         ]
     });
@@ -47,16 +48,12 @@ $(document).ready(function(){
 
             // Add new rows
             response.forEach(function(module){
-                var checked = module.status == 1 ? 'checked' : '';
+                var statusText = module.status == 1 ? 'Active' : 'Inactive';
 
                 table.row.add({
                     icon: `<i class="${module.icon} gradient-icon"></i>`,
                     modulename: module.modulename,
-                    status: `
-                        <input type="checkbox" class="chkToggle" data-toggle="toggle"
-                               data-on="Active" data-off="Inactive"
-                               data-onstyle="success" data-offstyle="danger" ${checked}>
-                    `,
+                    status: statusText,
                     action: `
                         <button class="btn btn-sm btn-primary edit-btn" data-id="${module.id}">Edit</button>
                         <button class="btn btn-sm btn-danger delete-btn" data-id="${module.id}">Delete</button>
@@ -66,9 +63,6 @@ $(document).ready(function(){
 
             // Draw the updated table
             table.draw();
-
-            // Re-init Bootstrap toggle for new rows
-            $('.chkToggle').bootstrapToggle();
         },
         error: function(xhr, status, error) {
             console.error(error);
@@ -76,5 +70,4 @@ $(document).ready(function(){
     });
 
 });
-
 </script>
