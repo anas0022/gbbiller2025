@@ -3,5 +3,6 @@
 @section('title', 'Supper Admin Menu')
 
 @section('content')
-sfgjgjhfgdjfhgjdfjjjjjjjjjjjjjjjjjjjjjjjjg
+@include('Supperadmin.Menus.superadmin.modelformcreate')
+   @include('Supperadmin.Menus.superadmin.table')
 @endsection

@@ -9,6 +9,6 @@ Route::middleware(['auth'])->group(function () use ($allowedIp) {
         if (request()->ip() !== $allowedIp) {
             return redirect('/'); // redirect to home if IP is not allowed
         }
-        return view('Supperadmin.Menus.superadmin');
+        return view('Supperadmin.Menus.superadmin.index');
     })->name('superadmin.menus');
 });
