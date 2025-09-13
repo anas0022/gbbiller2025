@@ -75,6 +75,7 @@
             border-radius: .25rem;
         }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>

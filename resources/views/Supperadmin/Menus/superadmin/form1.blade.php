@@ -1,6 +1,6 @@
 <form action="{{ route('superadmin.menus.store') }}" method="POST" enctype="multipart/form-data" id="moduleForm">
     @csrf
-    <input type="hidden" name="if" value="">
+    <input type="hidden" name="id" value="" id="module_id">
     <span id="success-span" style="color: green; margin-top:10px; display:block;"></span>
 
     <span id="general-errors" style="color: red; margin-bottom: 10px;"></span>
@@ -46,62 +46,4 @@ document.getElementById('icon').addEventListener('input', function() {
 });
 
 </script>
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("moduleForm").addEventListener("submit", async function(e) {
-        e.preventDefault(); // stop normal submit
-
-        // Clear errors + success
-        document.getElementById("modulename_error").innerText = "";
-        document.getElementById("icon_error").innerText = "";
-        document.getElementById("general-errors").innerText = "";
-        document.getElementById("success-span").innerText = "";
-
-        const formData = new FormData(this);
-
-        try {
-            const response = await fetch(this.action, {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
-                    "Accept": "application/json"
-                },
-                body: formData
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                if (data.errors) {
-                    for (const key in data.errors) {
-                        const errorSpan = document.getElementById(`${key}_error`);
-                        if (errorSpan) errorSpan.innerText = data.errors[key][0];
-                    }
-                } else if (data.message) {
-                    document.getElementById("general-errors").innerText = data.message;
-                }
-            } else {
-                // ✅ Show success message
-              document.getElementById("success-span").innerHTML = 
-    (data.message || "Success!") + 
-    '<img src="/images/success/icons/check-mark.png" style="width:20px; margin-left:10px;" />';
-
-                // Optional: clear form after success
-                this.reset();
-
-                // Optional: redirect if API sends redirect URL
-                if (data.redirect) {
-                    setTimeout(() => window.location.href = data.redirect, 1500);
-                }
-            }
-
-        } catch (err) {
-            document.getElementById("general-errors").innerText =
-                "Something went wrong. Please try again.";
-        }
-    });
-});
-
-
-    </script>
-    
+  

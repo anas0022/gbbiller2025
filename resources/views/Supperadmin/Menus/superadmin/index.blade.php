@@ -4,6 +4,7 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/supperadmin/menu.css') }}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
     @include('Supperadmin.Menus.superadmin.modelformcreate')
     <div class="btn-actions-pane-right">

@@ -78,6 +78,37 @@ public function superadminmenu() {
 
     return response()->json($menus);
 }
+ public function updateStatus(Request $request)
+    {
+       
 
+        $module = SuperAdminModules::findOrFail($request->id);
+        $module->status = $request->status;
+        $module->save();
 
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully',
+            'status'  => $module->status,
+        ]);
+    }
+
+    public function deleteModule($id)
+    {
+        try {
+            $module = SuperAdminModules::findOrFail($id);
+            $module->delete();
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Module deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Something went wrong. Please try again later.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -27,15 +27,15 @@
 	cursor: pointer;
 	outline: none;
 	width: 55px;
-  height: 35px;
-	background-color: rgb(232, 42, 42);
+ height: 25px;
+	background-color: #d2d3d5;
 	/* -webkit-transform: skewX(-7deg);
 	-ms-transform: skewX(-7deg);
  */
 	-webkit-transition: 0.3s;
 	-o-transition: 0.3s;
 	transition: 0.3s;
-    border-radius: 5px;
+   border-radius: 12px;
    
 }
 input[type="checkbox"]:before {
@@ -49,6 +49,7 @@ input[type="checkbox"]:before {
 	height: 25px;
 	color: rgb(0, 0, 0);
     background-color: #ffffff;
+	border-radius: 50%;
 	/* top: 0.42em;
 	left: 0.42em; */
 	-webkit-transition: 0.3s;
@@ -68,13 +69,15 @@ input[type="checkbox"]:before {
 	letter-spacing: 1px;
 }
 input[type="checkbox"]:checked {
-    background-color: rgb(6, 196, 6);
+    background-color: #2651be;
     	width: 55px;
-  height: 35px;
+height: 25px;
+
 }
 input[type="checkbox"]:checked:before {
 	content: "ON";
 	left: 3.1em;
+		
 	
 }
 div.dataTables_wrapper div.dataTables_length select {

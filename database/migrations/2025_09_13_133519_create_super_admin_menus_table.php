@@ -13,14 +13,6 @@ return new class extends Migration
     {
         Schema::create('super_admin_menus', function (Blueprint $table) {
             $table->id();
-            $table->string('modulename', 255)->nullable();
-            $table->string('icon', 255)->nullable();
-            $table->string('route', 255)->nullable();
-            $table->string('menuname', 255)->nullable();
-            $table->string('submenuname', 255)->nullable();
-            $table->integer('module_id')->default(0);
-            $table->integer('menu_id')->default(0);
-            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }
