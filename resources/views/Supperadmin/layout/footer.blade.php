@@ -1,3 +1,5 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="app-wrapper-footer">
     <div class="app-footer">
         <div class="app-footer__inner">
@@ -456,6 +458,8 @@
         <!-- Form -->
         <form id="addColumnsForm">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="migration" id="migrationField">
+
     <div class="form-group">
         <label for="nonMigratedModelSelect">Select Model</label>
         <select id="nonMigratedModelSelect" name="model" class="form-control" required>
@@ -834,12 +838,14 @@ document.getElementById('addColumnsForm').addEventListener('submit', async funct
 
     try {
         const response = await fetch('/add-columns', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: formData
-        });
+    method: 'POST',
+    headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Accept': 'application/json'
+    },
+    body: formData
+});
+
 
         if (!response.ok) {
             const errorData = await response.json();
@@ -875,4 +881,24 @@ function showMessage(message, type = 'success') {
         </div>
     `;
 }
+document.getElementById('nonMigratedModelSelect').addEventListener('change', function() {
+    let model = this.value; // e.g. App\Models\SupperAdmin\Menu\SuperAdminMenu
+
+    // Extract only class name → "SuperAdminMenu"
+    let parts = model.split('\\');
+    let className = parts[parts.length - 1];
+
+    // Convert PascalCase → snake_case plural
+    let snake = className.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+    if (!snake.endsWith('s')) {
+        snake = snake + 's'; // simple pluralization
+    }
+
+    // Build migration name correctly
+    const migrationName = `create_${snake}_table`;
+
+    document.getElementById('migrationField').value = migrationName;
+});
+
+
 </script>

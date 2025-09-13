@@ -14,6 +14,8 @@ use Illuminate\Database\Schema\Blueprint;
 
 
 
+
+
 Route::get('/migrate', function () {
     try {
         Artisan::call('migrate', ['--force' => true]);
@@ -128,77 +130,70 @@ Route::get('/get-non-migrated-models', function () {
 
     return response()->json($nonMigratedModels);
 });
-
-Route::post('/add-columns', function(Request $request) {
-    $request->validate([
-        'model' => 'required|string',
+Route::post('/add-columns', function (Request $request) {
+    $validated = $request->validate([
+        'migration' => 'required|string', // e.g. "create_super_admin_menus_table"
         'columns' => 'required|array',
         'columns.*.name' => 'required|string',
         'columns.*.type' => 'required|string',
         'columns.*.nullable' => 'nullable|boolean',
-        'columns.*.default' => 'nullable|string',
+        'columns.*.default' => 'nullable',
         'columns.*.unique' => 'nullable|boolean',
         'columns.*.length' => 'nullable|integer',
     ]);
 
-    $model = $request->model;
+    $migrationName = $validated['migration'];
 
-    // Try to resolve actual table name from model
-    if (class_exists($model)) {
-        $instance = new $model;
-        $table = $instance->getTable();
-    } else {
-        // fallback to snake plural
-        $table = Str::snake(Str::plural(class_basename($model)));
-    }
+    // 🔍 Find migration file by partial name
+    $migrationPath = collect(File::files(database_path('migrations')))
+        ->first(fn($file) => Str::contains($file->getFilename(), $migrationName));
 
-    // ✅ If table does not exist, create it
-    if (!Schema::hasTable($table)) {
-        Schema::create($table, function (Blueprint $tableBlueprint) use ($request) {
-            $tableBlueprint->id();
-            foreach ($request->columns as $column) {
-                $name = $column['name'];
-                $type = $column['type'];
-                $length = $column['length'] ?? null;
-
-                $col = $length 
-                    ? $tableBlueprint->$type($name, $length)
-                    : $tableBlueprint->$type($name);
-
-                if (!empty($column['nullable'])) $col->nullable();
-                if (!empty($column['default'])) $col->default($column['default']);
-                if (!empty($column['unique'])) $col->unique();
-            }
-            $tableBlueprint->timestamps();
-        });
-
+    if (!$migrationPath) {
         return response()->json([
-            'status' => 'success',
-            'message' => "Table `$table` created and columns added."
-        ]);
+            'status' => 'error',
+            'message' => "Migration file for `$migrationName` not found."
+        ], 404);
     }
 
-    // ✅ If table exists, just add columns
-    Schema::table($table, function (Blueprint $tableBlueprint) use ($request, $table) {
-        foreach ($request->columns as $column) {
-            $name = $column['name'];
-            $type = $column['type'];
-            $length = $column['length'] ?? null;
+    $fileContent = File::get($migrationPath);
 
-            if (Schema::hasColumn($table, $name)) continue;
+    // 🏗️ Build column definitions
+    $columnLines = '';
+    foreach ($validated['columns'] as $column) {
+        $name = $column['name'];
+        $type = $column['type'];
+        $length = $column['length'] ?? null;
 
-            $col = $length 
-                ? $tableBlueprint->$type($name, $length)
-                : $tableBlueprint->$type($name);
+        // Example: $table->string('title', 255)
+        $definition = $length
+            ? "\$table->$type('$name', $length)"
+            : "\$table->$type('$name')";
 
-            if (!empty($column['nullable'])) $col->nullable();
-            if (!empty($column['default'])) $col->default($column['default']);
-            if (!empty($column['unique'])) $col->unique();
+        if (!empty($column['nullable'])) {
+            $definition .= "->nullable()";
         }
-    });
+        if (array_key_exists('default', $column) && $column['default'] !== null) {
+            $val = is_string($column['default']) ? "'{$column['default']}'" : $column['default'];
+            $definition .= "->default($val)";
+        }
+        if (!empty($column['unique'])) {
+            $definition .= "->unique()";
+        }
+
+        $columnLines .= "            $definition;\n";
+    }
+
+    // ✍️ Insert new columns before $table->timestamps();
+    $updatedContent = str_replace(
+        '$table->timestamps();',
+        $columnLines . '            $table->timestamps();',
+        $fileContent
+    );
+
+    File::put($migrationPath, $updatedContent);
 
     return response()->json([
         'status' => 'success',
-        'message' => "Columns added successfully to `$table`."
+        'message' => "✅ Columns added to migration file `$migrationName`. Run `php artisan migrate` to apply."
     ]);
 });

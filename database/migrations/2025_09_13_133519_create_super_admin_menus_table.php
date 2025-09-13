@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('super_admin_menus', function (Blueprint $table) {
             $table->id();
+                        $table->integer('Module_id')->nullable();
             $table->timestamps();
         });
     }
