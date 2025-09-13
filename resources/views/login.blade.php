@@ -4,52 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Bill Management System</title>
     <link rel="stylesheet" href="{{ asset('css/Login/login.css') }}">
-
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container ">
-        <div class="login-box ">
-            <img src="http://127.0.0.1:8000/images/Group 11(3).png" alt="Logo" class="avatar"
-                style="filter: invert(1) brightness(0);">
+    <div class="container">
+        <div class="background-animation"></div>
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo-section">
+                    <div class="logo-container">
+                        <img src="http://127.0.0.1:8000/images/Group 11(3).png" alt="Logo" class="logo" style="filter:invert(1);">
+                    </div>
 
-
-            {{-- General Errors --}}
-            <div id="general-errors" style="color: red; margin-bottom: 10px;"></div>
-
-            <form id="loginForm" action="{{ route('login') }}" method="POST">
-                @csrf
-
-                {{-- Biller Code --}}
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                    <input id="numOnly" name="biller_code" type="text">
-                    <label>Biller Code</label>
-                    <span class="error-message" id="error-biller_code"
-                        style="color:red; font-size:0.9em; width:100%; display:flex; justify-content:start;"></span>
                 </div>
 
-                {{-- Password --}}
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                    <input id="password" name="password" type="password" minlength="6">
-                    <label>Password</label>
-                    <span class="error-message" id="error-password"
-                        style="color:red; font-size:0.9em; width:100%; display:flex; justify-content:start;"></span>
-                </div>
+                {{-- General Errors --}}
+                <div id="general-errors" class="error-message general-error"></div>
 
-                {{-- Forgot Password --}}
-                <div class="remember-forgot">
-                    <a href="#">Forgot Password?</a>
-                     <button type="submit" class="btn" style="width: 200px;">Login</button>
-                </div>
+                <form id="loginForm" action="{{ route('login') }}" method="POST" class="login-form">
+                    @csrf
 
-                {{-- Submit --}}
-               
-            </form>
+                    {{-- Biller Code --}}
+                    <div class="input-group">
+                        <div class="input-container">
+                            <span class="input-icon">
+                                <ion-icon name="business"></ion-icon>
+                            </span>
+                            <input id="numOnly" name="biller_code" type="text" class="form-input" placeholder=" ">
+                            <label class="input-label">Biller Code</label>
+                        </div>
+                        <span class="error-message" id="error-biller_code"></span>
+                    </div>
+
+                    {{-- Password --}}
+                    <div class="input-group">
+                        <div class="input-container">
+                            <span class="input-icon">
+                                <ion-icon name="lock-closed"></ion-icon>
+                            </span>
+                            <input id="password" name="password" type="password" class="form-input" placeholder=" " minlength="6">
+                            <label class="input-label">Password</label>
+                            <span class="password-toggle" onclick="togglePassword()">
+                                <ion-icon name="eye" id="eye-icon"></ion-icon>
+                            </span>
+                        </div>
+                        <span class="error-message" id="error-password"></span>
+                    </div>
+
+                    {{-- Forgot Password --}}
+                    <div class="forgot-password">
+                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    </div>
+
+                    {{-- Submit Button --}}
+                    <button type="submit" class="login-btn">
+                        <span class="btn-text">Sign In</span>
+                        <div class="btn-loader"></div>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -96,13 +112,42 @@ inp.addEventListener('paste', (e) => {
 </script> --}}
 
     <script>
+        // Password toggle functionality
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.setAttribute('name', 'eye-off');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.setAttribute('name', 'eye');
+            }
+        }
+
+        // Form submission with loading state
         document.getElementById("loginForm").addEventListener("submit", async function(e) {
             e.preventDefault();
 
+            const submitBtn = document.querySelector('.login-btn');
+            const btnText = document.querySelector('.btn-text');
+            const btnLoader = document.querySelector('.btn-loader');
+
+            // Show loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
             // Clear previous errors
             document.getElementById("general-errors").innerText = "";
-            document.getElementById("error-biller_code").innerText = "";
-            document.getElementById("error-password").innerText = "";
+            document.getElementById("general-errors").classList.remove('show');
+            
+            // Clear field-specific errors
+            const errorElements = document.querySelectorAll('.error-message');
+            errorElements.forEach(el => {
+                el.innerText = "";
+                el.classList.remove('show');
+            });
 
             const formData = new FormData(this);
 
@@ -120,14 +165,19 @@ inp.addEventListener('paste', (e) => {
 
                 if (!response.ok) {
                     if (data.errors) {
-    for (const key in data.errors) {
-        const errorSpan = document.getElementById(`${key}_error`); // ✅ match your span IDs
-        if (errorSpan) errorSpan.innerText = data.errors[key][0];
-    }
-}
- else if (data.message) {
+                        // Handle field-specific errors
+                        for (const key in data.errors) {
+                            const errorSpan = document.getElementById(`error-${key}`);
+                            if (errorSpan) {
+                                errorSpan.innerText = data.errors[key][0];
+                                errorSpan.classList.add('show');
+                            }
+                        }
+                    } else if (data.message) {
                         // General error
-                        document.getElementById("general-errors").innerText = data.message;
+                        const generalError = document.getElementById("general-errors");
+                        generalError.innerText = data.message;
+                        generalError.classList.add('show');
                     }
                 } else {
                     // Success: redirect
@@ -135,36 +185,60 @@ inp.addEventListener('paste', (e) => {
                 }
 
             } catch (err) {
-                document.getElementById("general-errors").innerText = "Something went wrong. Please try again.";
+                const generalError = document.getElementById("general-errors");
+                generalError.innerText = "Something went wrong. Please try again.";
+                generalError.classList.add('show');
+            } finally {
+                // Hide loading state
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
             }
         });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('.input-box input');
+            const inputs = document.querySelectorAll('.form-input');
 
-            function updateHasValueClass(input) {
+            function updateInputState(input) {
+                const label = input.nextElementSibling;
                 if (input.value && input.value.trim() !== '') {
-                    input.classList.add('has-value');
+                    label.style.transform = 'translateY(-24px) scale(0.85)';
+                    label.style.color = '#667eea';
+                    label.style.background = '#ffffff';
+                    label.style.padding = '0 8px';
                 } else {
-                    input.classList.remove('has-value');
+                    label.style.transform = 'translateY(-50%)';
+                    label.style.color = '#9ca3af';
+                    label.style.background = 'transparent';
+                    label.style.padding = '0';
                 }
             }
 
             inputs.forEach(function(input) {
-                ['input', 'change', 'blur'].forEach(function(evt) {
+                ['input', 'change', 'blur', 'focus'].forEach(function(evt) {
                     input.addEventListener(evt, function() {
-                        updateHasValueClass(input);
+                        updateInputState(input);
                     });
                 });
                 // Initialize state on load
-                updateHasValueClass(input);
+                updateInputState(input);
             });
 
             // Handle delayed autofill
             setTimeout(function() {
-                inputs.forEach(updateHasValueClass);
+                inputs.forEach(updateInputState);
             }, 400);
+
+            // Add focus/blur effects
+            inputs.forEach(function(input) {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-1px)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
         });
     </script>
 </body>

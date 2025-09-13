@@ -77,7 +77,8 @@
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-
+   @stack('modals')
+        @stack('scripts')
 <body>
     <div class="preloader">
         <div class="loader">
@@ -138,7 +139,7 @@
                 };
             })();
         </script>
-        @stack('modals')
+     
 </body>
 
 </html>

@@ -108,90 +108,66 @@
             </div>
             <div class="modal-body">
                 <form id="addColumnsForm">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="migration" id="migrationField">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="migration" id="migrationField">
 
-    <div class="form-group">
-        <label for="nonMigratedModelSelect">Select Model</label>
-        <select id="nonMigratedModelSelect" name="model" class="form-control" required>
-            <option value="">--Select Model--</option>
-        </select>
-    </div>
+                    <div class="form-group">
+                        <label for="nonMigratedModelSelect">Select Model</label>
+                        <select id="nonMigratedModelSelect" name="model" class="form-control" required>
+                            <option value="">--Select Model--</option>
+                        </select>
+                    </div>
 
-  <div id="columnsContainer">
-    <div class="form-row mb-2 columnRow border p-2 rounded">
-        <!-- Column Name -->
-        <div class="col">
-            <input type="text" name="columns[0][name]" placeholder="Column Name" class="form-control" required>
-        </div>
+                    <div id="columnsContainer">
+                        <div class="form-row mb-2 columnRow border p-2 rounded">
+                            <div class="col">
+                                <input type="text" name="columns[0][name]" placeholder="Column Name" class="form-control" required>
+                            </div>
+                            <div class="col">
+                                <select name="columns[0][type]" class="form-control" required>
+                                    <option value="string">string</option>
+                                    <option value="integer">integer</option>
+                                    <option value="bigInteger">bigInteger</option>
+                                    <option value="boolean">boolean</option>
+                                    <option value="text">text</option>
+                                    <option value="longText">longText</option>
+                                    <option value="date">date</option>
+                                    <option value="datetime">datetime</option>
+                                    <option value="timestamp">timestamp</option>
+                                    <option value="float">float</option>
+                                    <option value="decimal">decimal</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <input type="number" name="columns[0][length]" placeholder="Length (e.g. 255)" class="form-control">
+                            </div>
+                            <div class="col">
+                                <select name="columns[0][nullable]" class="form-control">
+                                    <option value="1">Nullable</option>
+                                    <option value="0">Not Nullable</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <input type="text" name="columns[0][default]" placeholder="Default" class="form-control">
+                            </div>
+                            <div class="col">
+                                <select name="columns[0][unique]" class="form-control">
+                                    <option value="0">Not Unique</option>
+                                    <option value="1">Unique</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Type -->
-        <div class="col">
-            <select name="columns[0][type]" class="form-control" required>
-                <option value="string">string</option>
-                <option value="integer">integer</option>
-                <option value="bigInteger">bigInteger</option>
-                <option value="boolean">boolean</option>
-                <option value="text">text</option>
-                <option value="longText">longText</option>
-                <option value="date">date</option>
-                <option value="datetime">datetime</option>
-                <option value="timestamp">timestamp</option>
-                <option value="float">float</option>
-                <option value="decimal">decimal</option>
-            </select>
-        </div>
+                   
 
-        <!-- Length (for string/char) -->
-        <div class="col">
-            <input type="number" name="columns[0][length]" placeholder="Length (e.g. 255)" class="form-control">
-        </div>
-
-        <!-- Nullable -->
-        <div class="col">
-            <select name="columns[0][nullable]" class="form-control">
-                <option value="1">Nullable</option>
-                <option value="0">Not Nullable</option>
-            </select>
-        </div>
-
-        <!-- Default -->
-        <div class="col">
-            <input type="text" name="columns[0][default]" placeholder="Default" class="form-control">
-        </div>
-
-        <!-- Unique -->
-        <div class="col">
-            <select name="columns[0][unique]" class="form-control">
-                <option value="0">Not Unique</option>
-                <option value="1">Unique</option>
-            </select>
-        </div>
-
-        <!-- Unsigned -->
-        <div class="col">
-            <select name="columns[0][unsigned]" class="form-control">
-                <option value="0">Signed</option>
-                <option value="1">Unsigned</option>
-            </select>
-        </div>
-
-        <!-- Index -->
-        <div class="col">
-            <select name="columns[0][index]" class="form-control">
-                <option value="0">No Index</option>
-                <option value="1">Index</option>
-            </select>
-        </div>
-    </div>
-</div>
-
-
-    <div class="d-flex justify-content-between mt-3">
-        <button type="button" id="addColumnBtn" class="btn btn-secondary btn-sm">Add Another Column</button>
-        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-    </div>
-</form>
+                    <div class="modal-footer">
+                         <button type="button" id="addColumnBtn" class="btn-shine btn-wide btn-pill btn btn-dark btn-sm w-40">Add Column</button>
+                        <button type="submit" class="btn-shine btn-wide btn-pill btn btn-warning btn-sm w-40">
+                            <i class="fa fa-cog fa-spin mr-2"></i> Add Model
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
