@@ -16,6 +16,22 @@ use Illuminate\Database\Schema\Blueprint;
 
 
 
+$allowedIp = '127.0.0.1';
+
+Route::middleware(['auth'])->group(function () use ($allowedIp) {
+    Route::group([
+        'middleware' => function ($request, $next) use ($allowedIp) {
+            if ($request->ip() !== $allowedIp) {
+                abort(403, 'Unauthorized access from this IP.');
+            }
+            return $next($request);
+        }
+    ], function () {
+
+Route::get('/database', function () {
+    return view('Supperadmin.database.index');
+});
+
 Route::get('/migrate', function () {
     try {
         Artisan::call('migrate', ['--force' => true]);
@@ -196,4 +212,72 @@ Route::post('/add-columns', function (Request $request) {
         'status' => 'success',
         'message' => "✅ Columns added to migration file `$migrationName`. Run `php artisan migrate` to apply."
     ]);
+});
+Route::get('/all-models', function () {
+    $modelFiles = File::allFiles(app_path('Models')); // Get all files in app/Models
+    $models = [];
+
+    foreach ($modelFiles as $file) {
+        $relativePath = $file->getRelativePathname();
+        $class = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
+
+        if (class_exists($class)) {
+            $models[] = $class;
+        }
+    }
+
+    return response()->json($models);
+});
+
+Route::get('/tables-status', function () {
+    $modelFiles = File::allFiles(app_path('Models'));
+    $tables = [];
+
+    foreach ($modelFiles as $file) {
+        $relativePath = $file->getRelativePathname();
+        $class = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
+
+        if (class_exists($class)) {
+            $modelInstance = new $class;
+            $table = $modelInstance->getTable();
+            $migrated = Schema::hasTable($table);
+            $columnsCount = $migrated ? count(Schema::getColumnListing($table)) : 0;
+
+            $tables[] = [
+                'table_name' => $table,
+                'columns_count' => $columnsCount,
+                'migrated' => $migrated
+            ];
+        }
+    }
+
+    return response()->json($tables);
+});
+
+
+Route::post('/migrate-table', function (\Illuminate\Http\Request $request) {
+    $table = $request->table;
+
+    // Find migration file that contains this table name
+    $migrationFile = collect(File::files(database_path('migrations')))
+        ->first(fn($file) => str_contains(File::get($file), "Schema::create('$table'"));
+
+    if (!$migrationFile) {
+        return response()->json(['message' => "Migration for table '$table' not found"], 404);
+    }
+
+    try {
+        Artisan::call('migrate', ['--path' => 'database/migrations/' . $migrationFile->getFilename(), '--force' => true]);
+
+        return response()->json([
+            'message' => "✅ Table '$table' migrated successfully",
+            'output' => Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+});
 });
