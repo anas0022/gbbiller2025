@@ -98,7 +98,7 @@
 </script>
 
 
-
+@push('modals')
     <div class="modal" tabindex="-1" role="dialog" id="maketablecolumn" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-80" role="document">
         <div class="modal-content">
@@ -362,4 +362,4 @@
                 document.getElementById('migrationField').value = migrationName;
             });
         </script>
-  
+    @endpush
