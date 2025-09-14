@@ -74,6 +74,17 @@
             box-shadow: 0 .76875rem 2.4875rem rgba(0, 106, 213, 0.3), 0 1.3375rem 1.70625rem rgba(52, 58, 64, .3), 0 .55rem .53125rem rgba(159, 0, 0, 0.05), 0 .225rem .4375rem rgba(0, 128, 255, 0.3);
             border-radius: .25rem;
         }
+        #preloader-img {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -82,9 +93,9 @@
 <body>
     <div class="preloader">
         <div class="loader">
-            <video src="{{ asset('images/preloader/preloader.mp4') }}" autoplay loop muted playsinline preload="auto"
-                style="width: 100px; height: 100px; display: block; margin: 0 auto;">
-            </video>
+            <img src="{{ asset('images/preloader/preloader.png') }}"
+                style="width: 100px; height: 100px; display: block; margin: 0 auto;" id="preloader-img" />
+       
 
         </div>
     </div>

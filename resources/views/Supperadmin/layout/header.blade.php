@@ -2,8 +2,8 @@
     <div class="app-header__logo">
         <div class="logo-src" style="height:auto;">
             {{--  <img src="{{ asset('images/GB_logo.png') }}" alt="Logo" width="50%"> --}}
-            <img src="http://127.0.0.1:8000/images/Group 11(3).png" alt="Logo"
-                style="filter: invert(1) brightness(0); width:50px;">
+            <img src="{{ asset('images/GBlogo.png') }}" alt="Logo"
+                style=" width:50px;">
         </div>
         <div class="header__pane ml-auto">
             <div>

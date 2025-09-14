@@ -16,7 +16,7 @@
             <div class="login-card">
                 <div class="logo-section">
                     <div class="logo-container">
-                        <img src="http://127.0.0.1:8000/images/Group 11(3).png" alt="Logo" class="logo" style="filter:invert(1);">
+                        <img src="{{ asset('images/GBlogo.png') }}" alt="Logo" style="width:80px; height:80px;">
                     </div>
 
                 </div>
