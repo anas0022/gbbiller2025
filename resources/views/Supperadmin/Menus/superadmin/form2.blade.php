@@ -14,7 +14,7 @@
     <div class="form-group">
         <label for="route">Url</label>
         <input type="text" id="route" name="route" class="form-control" placeholder="e.g. /dashboard">
-                 <span class="text-danger error-text route_error" id="route_error"></span>
+                 <span class="text-danger error-text routes_error" id="route_error"></span>
     </div>
     <div class="form-group">
         <label for="Module_id">Module</label>

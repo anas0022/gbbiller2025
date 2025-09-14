@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SupperAdmin\SupperAdminModuleController;
 use App\Http\Controllers\SupperAdmin\SupperAdminMenuController;
+use App\Http\Controllers\SupperAdmin\SupperAdminSubMenuController;
 use App\Models\SupperAdmin\Menu\SuperAdminModules;
-
+use App\Models\SupperAdmin\Menu\SuperAdminSubmenu;
 $allowedIp = '127.0.0.1';
 
 Route::middleware(['auth'])->group(function () use ($allowedIp) {
@@ -42,4 +43,24 @@ Route::get('/get-menu/superadmin',function(){
     ->name('menu.updateStatus');
 
     Route::delete('/superadmin/menu/delete-menu/{id}', [SupperAdminMenuController::class, 'deleteModule'])->name('superadmin.menus.delete');
+
+   Route::get('/get-menu', function(){
+    $menu = SuperAdminMenu::where('Status' , 1)->get();;
+    return ($menu);
 });
+Route::post('/superadmin/submenu/create',[SupperAdminSubMenuController::class , 'create_menu'])->name('create.submenu');
+
+Route::get('/get-submenu/superadmin', function () {
+    $menu = SuperAdminSubmenu::with('module')
+        ->with('submenu')
+        ->get();
+    return ($menu);
+});
+ Route::post('/superadmin/submenu/update-status', [SupperAdminSubMenuController::class, 'updateStatus'])
+    ->name('submenu.updateStatus');
+Route::delete('/superadmin/menu/delete-submenu/{id}', [SupperAdminSubMenuController::class, 'deleteMenu'])->name('superadmin.submenus.delete');
+
+});
+
+
+
