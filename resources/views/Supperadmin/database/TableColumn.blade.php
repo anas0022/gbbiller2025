@@ -42,6 +42,7 @@
 
 <script>
     $(function() {
+        
         var table = $('.table-status-table').DataTable({
             responsive: true,
             ajax: {
@@ -83,6 +84,7 @@
             ]
 
         });
+        
         $(document).on('click', '.migrate-btn', function() {
             let tableName = $(this).data('table');
 

@@ -1,53 +1,109 @@
-<form action="" method="POST" enctype="multipart/form-data">
+<form action="{{ route('create.menu') }}" method="POST" enctype="multipart/form-data" id="menu-form">
     @csrf
+    <input type="hidden" name="id" id="id">
+      <span id="success-spans" style="color: green; margin-top:10px; display:block;"></span>
+
+    <span id="general-error" style="color: red; margin-bottom: 10px;"></span>
     <div class="form-group">
-        <label for="module_name">Menu Name</label>
-        <input type="text" id="module_name" name="module_name" class="form-control">
+        <label for="Menuname">Menu Name</label>
+        <input type="text" id="Menuname" name="Menuname" class="form-control">
+         <span class="text-danger error-text Menuname_error" id="Menuname_error"></span>
     </div>
 
+   
     <div class="form-group">
-        <label for="icon">Icon</label>
-        <input type="text" id="icon2" name="icon" class="form-control" placeholder="e.g. fa fa-id-card">
-        <p style="margin-top:10px;">
-            Preview: <span id="icon-preview2"></span> <small id="icon-error2" style="color:red; display:none;">Invalid
-                fa-icon class</small>
-        </p>
+        <label for="route">Url</label>
+        <input type="text" id="route" name="route" class="form-control" placeholder="e.g. /dashboard">
+                 <span class="text-danger error-text route_error" id="route_error"></span>
+    </div>
+    <div class="form-group">
+        <label for="Module_id">Module</label>
+       <select name="Module_id" class="form-control" id="moduels-for-menu">
 
-    </div>
-    <div class="form-group">
-        <label for="link">Url</label>
-        <input type="text" id="link" name="link" class="form-control" placeholder="e.g. /dashboard">
-    </div>
-    <div class="form-group">
-        <label for="position">Module</label>
-        <select name="module" id="" class="form-control">
-            <option value="1">Select Module</option>
+      
         </select>
+          <span class="text-danger error-text module_id_error" id="module_id_error"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create Module</button>
+    <button type="submit" class="btn btn-primary">Create Menu</button>
     <button type="button" class="btn btn-secondary" id="closemodal2">close</button>
 </form>
 
+
 <script>
-    document.getElementById('icon2').addEventListener('input', function() {
-        const preview = document.getElementById('icon-preview2');
-        const errorMsg = document.getElementById('icon-error2');
-        const className = this.value.trim();
+ $(function() {
 
-        // Try to create the icon element
-        preview.innerHTML = `<i class="${className}"></i>`;
+$.ajax({
+    url: '/get-modules',
+    method: 'GET',
+    success: function(response){
+        let $select = $('#moduels-for-menu');
+        $select.empty(); // clear old options
 
-        const iconEl = preview.querySelector("i");
+        $select.append(`<option value="">-- Select Module --</option>`);
 
-        // Check if icon is rendered properly (Font Awesome hides invalid icons with ::before empty content)
-        const style = window.getComputedStyle(iconEl, '::before');
-        const hasIcon = style && style.content !== 'none' && style.content !== '';
+        if (response.length > 0) {
+            response.forEach(function(module) {
+                $select.append(`<option value="${module.id}"> ${module.modulename}</option>`);
 
-        if (hasIcon) {
-            errorMsg.style.display = "none"; // hide error
+
+            });
         } else {
-            errorMsg.style.display = "inline"; // show error
+            $select.append(`<option value="">No modules found</option>`);
+        }
+    },
+    error: function(xhr) {
+        console.error("Error fetching modules:", xhr.responseText);
+        $('#moduels-for-menu').html(`<option value="">Error loading modules</option>`);
+    }
+});
+
+    });
+
+
+
+     $('#menu-form').on('submit', async function (e) {
+        e.preventDefault();
+        $('#modulename_error, #icon_error, #general-error, #success-spans').text('');
+
+        const formData = new FormData(this);
+        const token = $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content');
+
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+
+            const ct = response.headers.get('content-type') || '';
+            let data = ct.indexOf('application/json') !== -1 ? await response.json() : null;
+
+            if (!response.ok) {
+                if (response.status === 419) {
+                    $('#general-error').text('Session expired or CSRF token mismatch.');
+                } else if (data && data.errors) {
+                    for (const key in data.errors) {
+                        $(`#${key}_error`).text(data.errors[key][0]);
+                    }
+                } else {
+                    $('#general-error').text(data?.message || `Server error: ${response.status}`);
+                }
+                return;
+            }
+
+            // Success
+            $('#success-spans').html((data.message || 'Success!') + '<img src="/images/success/icons/check-mark.png" style="width:20px;margin-left:10px;" />');
+            loadModules();
+         
+        } catch (err) {
+            console.error('Form submit error:', err);
+            $('#general-error').text('Something went wrong. Check console / network tab.');
         }
     });
+
 </script>

@@ -68,13 +68,17 @@
             modal.hide();
         });
 
+ $(document).on('click', '#addmenubtn', function () {
+        var myModal = new bootstrap.Modal(document.getElementById('createmenu'));
+            myModal.show();
+ });
 
-
-        document.getElementById('addmenubtn').addEventListener('click', function() {
+   /*      document.getElementById('addmenubtn').addEventListener('click', function() {
+           
             var myModal = new bootstrap.Modal(document.getElementById('createmenu'));
             myModal.show();
         });
-
+ */
 
         // when modal opens, set default text = Create Module
         document.getElementById('createmenu').addEventListener('shown.bs.modal', function() {

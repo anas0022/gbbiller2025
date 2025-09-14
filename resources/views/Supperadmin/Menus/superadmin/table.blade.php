@@ -24,6 +24,7 @@
 
 
 <script>
+    
 $(function () {
     // --- DataTable ---
     var table = $('.module-table').DataTable({

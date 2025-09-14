@@ -103,7 +103,7 @@
 
     // Test function for delete route
     function testDeleteRoute() {
-        console.log('Testing delete route...');
+     
 
         // Test with a known model class
         const testModelClass = 'App\\Models\\Auth\\UserModel';
@@ -226,8 +226,8 @@
                          </button>`
 
                     ]).draw(false); 
-
-                
+                       
+                  loadTablesStatus();
                     setTimeout(function() {
                         $('#makemodel').modal('hide');
                     }, 1500);

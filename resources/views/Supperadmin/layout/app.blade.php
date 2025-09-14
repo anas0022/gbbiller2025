@@ -93,7 +93,7 @@
 <body>
     <div class="preloader">
         <div class="loader">
-            <img src="{{ asset('images/preloader/preloader.png') }}"
+            <img src="{{ asset('images/preloader/preloader2.png') }}"
                 style="width: 100px; height: 100px; display: block; margin: 0 auto;" id="preloader-img" />
        
 
