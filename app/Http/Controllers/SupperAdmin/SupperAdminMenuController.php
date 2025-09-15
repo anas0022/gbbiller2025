@@ -28,7 +28,7 @@ class SupperAdminMenuController extends Controller
                 $rules['Menuname'][] = Rule::unique('super_admin_menus', 'Menuname')->ignore($request->id);
             } else {
                 $rules['Menuname'][] = Rule::unique('super_admin_menus', 'Menuname');
-                
+
             }
 
             $validator = Validator::make($request->all(), $rules);
@@ -65,9 +65,9 @@ class SupperAdminMenuController extends Controller
             ], 500);
         }
     }
-public function updateStatus(Request $request)
+    public function updateStatus(Request $request)
     {
-       
+
 
         $module = SuperAdminMenu::findOrFail($request->id);
         $module->status = $request->status;
@@ -76,25 +76,25 @@ public function updateStatus(Request $request)
         return response()->json([
             'success' => true,
             'message' => 'Status updated successfully',
-            'status'  => $module->status,
+            'status' => $module->status,
         ]);
     }
 
-      public function deleteModule($id)
+    public function deleteModule($id)
     {
         try {
             $module = SuperAdminMenu::findOrFail($id);
             $module->delete();
 
             return response()->json([
-                'status'  => true,
+                'status' => true,
                 'message' => 'Module deleted successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => false,
+                'status' => false,
                 'message' => 'Something went wrong. Please try again later.',
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }

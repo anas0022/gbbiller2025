@@ -24,8 +24,8 @@
     <!-- Bootstrap 5 Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
 
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -74,13 +74,16 @@
             box-shadow: 0 .76875rem 2.4875rem rgba(0, 106, 213, 0.3), 0 1.3375rem 1.70625rem rgba(52, 58, 64, .3), 0 .55rem .53125rem rgba(159, 0, 0, 0.05), 0 .225rem .4375rem rgba(0, 128, 255, 0.3);
             border-radius: .25rem;
         }
+
         #preloader-img {
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
@@ -88,14 +91,15 @@
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-   @stack('modals')
-        @stack('scripts')
+@stack('modals')
+@stack('scripts')
+
 <body>
     <div class="preloader">
         <div class="loader">
             <img src="{{ asset('images/preloader/preloader2.png') }}"
                 style="width: 100px; height: 100px; display: block; margin: 0 auto;" id="preloader-img" />
-       
+
 
         </div>
     </div>
@@ -133,24 +137,24 @@
             document.onclick = resetTimer;
             document.onscroll = resetTimer;
 
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 var preloader = document.querySelector('.preloader');
                 preloader.classList.add('fade-out');
 
-                setTimeout(function() {
+                setTimeout(function () {
                     preloader.style.display = 'none';
                 }, 500); // match the CSS transition duration
             });
         </script>
         <script>
-            (function() {
+            (function () {
                 window.history.pushState(null, "", window.location.href);
-                window.onpopstate = function() {
+                window.onpopstate = function () {
                     window.history.pushState(null, "", window.location.href);
                 };
             })();
         </script>
-     
+
 </body>
 
 </html>

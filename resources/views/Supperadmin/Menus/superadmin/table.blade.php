@@ -1,5 +1,3 @@
-
-
 <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4" style="margin-top: 10px;">
     <div class="row">
         <div class="col-sm-12">
@@ -24,41 +22,41 @@
 
 
 <script>
-    
-$(function () {
-    // --- DataTable ---
-    var table = $('.module-table').DataTable({
-        responsive: true,
-        columns: [
-            { data: 'icon', orderable: false },
-            { data: 'modulename' },
-            { data: 'status', orderable: false },
-            { data: 'action', orderable: false }
-        ]
-    });
 
-    // --- loadModules globally so other scripts can call it ---
-    window.loadModules = function () {
-        $.ajax({
-            url: '/superadmin/Create Menu/menu-table',
-            method: 'GET',
-            success: function (response) {
-                table.clear();
+    $(function () {
+        // --- DataTable ---
+        var table = $('.module-table').DataTable({
+            responsive: true,
+            columns: [
+                { data: 'icon', orderable: false },
+                { data: 'modulename' },
+                { data: 'status', orderable: false },
+                { data: 'action', orderable: false }
+            ]
+        });
 
-                response.forEach(function (module) {
-                    var checked = module.status == 1 ? 'checked' : '';
+        // --- loadModules globally so other scripts can call it ---
+        window.loadModules = function () {
+            $.ajax({
+                url: '/superadmin/Create Menu/menu-table',
+                method: 'GET',
+                success: function (response) {
+                    table.clear();
 
-                    table.row.add({
-                        icon: `<i class="${module.icon} gradient-icon"></i>`,
-                        modulename: module.modulename,
-                        status: `
+                    response.forEach(function (module) {
+                        var checked = module.status == 1 ? 'checked' : '';
+
+                        table.row.add({
+                            icon: `<i class="${module.icon} gradient-icon"></i>`,
+                            modulename: module.modulename,
+                            status: `
                             <input type="checkbox" class="chkToggle" 
                                    data-id="${module.id}"
                                    data-toggle="toggle"
                                    data-on="Active" data-off="Inactive"
                                    data-onstyle="success" data-offstyle="danger" ${checked}>
                         `,
-                        action: `
+                            action: `
                             <button class="btn btn-sm btn-primary edit-btn"
                                     data-id="${module.id}"
                                     data-name="${module.modulename}"
@@ -69,152 +67,152 @@ $(function () {
                               Delete
                             </button>
                         `
+                        });
                     });
+
+                    table.draw();
+
+                    // Re-init toggle plugin for new rows
+                    if ($.fn.bootstrapToggle) $('.chkToggle').bootstrapToggle();
+                },
+                error: function (xhr, status, error) {
+                    console.error('loadModules AJAX error:', status, error, xhr.responseText);
+                }
+            });
+        };
+
+        // Initial load + interval refresh
+        loadModules();
+        setInterval(loadModules, 5000);
+
+        // --- Form submit ---
+        $('#moduleForm').on('submit', async function (e) {
+            e.preventDefault();
+            $('#modulename_error, #icon_error, #general-errors, #success-span').text('');
+
+            const formData = new FormData(this);
+            const token = $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content');
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
                 });
 
-                table.draw();
+                const ct = response.headers.get('content-type') || '';
+                let data = ct.indexOf('application/json') !== -1 ? await response.json() : null;
 
-                // Re-init toggle plugin for new rows
-                if ($.fn.bootstrapToggle) $('.chkToggle').bootstrapToggle();
-            },
-            error: function (xhr, status, error) {
-                console.error('loadModules AJAX error:', status, error, xhr.responseText);
-            }
-        });
-    };
-
-    // Initial load + interval refresh
-    loadModules();
-    setInterval(loadModules, 5000);
-
-    // --- Form submit ---
-    $('#moduleForm').on('submit', async function (e) {
-        e.preventDefault();
-        $('#modulename_error, #icon_error, #general-errors, #success-span').text('');
-
-        const formData = new FormData(this);
-        const token = $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content');
-
-        try {
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': token,
-                    'Accept': 'application/json'
-                },
-                credentials: 'same-origin'
-            });
-
-            const ct = response.headers.get('content-type') || '';
-            let data = ct.indexOf('application/json') !== -1 ? await response.json() : null;
-
-            if (!response.ok) {
-                if (response.status === 419) {
-                    $('#general-errors').text('Session expired or CSRF token mismatch.');
-                } else if (data && data.errors) {
-                    for (const key in data.errors) {
-                        $(`#${key}_error`).text(data.errors[key][0]);
+                if (!response.ok) {
+                    if (response.status === 419) {
+                        $('#general-errors').text('Session expired or CSRF token mismatch.');
+                    } else if (data && data.errors) {
+                        for (const key in data.errors) {
+                            $(`#${key}_error`).text(data.errors[key][0]);
+                        }
+                    } else {
+                        $('#general-errors').text(data?.message || `Server error: ${response.status}`);
                     }
-                } else {
-                    $('#general-errors').text(data?.message || `Server error: ${response.status}`);
+                    return;
                 }
-                return;
+
+                // Success
+                $('#success-span').html((data.message || 'Success!') + '<img src="/images/success/icons/check-mark.png" style="width:20px;margin-left:10px;" />');
+                this.reset();
+                if (data?.redirect) setTimeout(() => window.location.href = data.redirect, 1200);
+                setTimeout(() => {
+                    $('#success-span').text('')
+                }, 3000);
+
+                window.loadModules();
+                $('#icon-preview').html('');
+                $('#card-header-text').text('Create Module');
+                $('#module_id').val('');
+            } catch (err) {
+                console.error('Form submit error:', err);
+                $('#general-errors').text('Something went wrong. Check console / network tab.');
             }
-
-            // Success
-            $('#success-span').html((data.message || 'Success!') + '<img src="/images/success/icons/check-mark.png" style="width:20px;margin-left:10px;" />');
-            this.reset();
-            if (data?.redirect) setTimeout(() => window.location.href = data.redirect, 1200);
-            setTimeout(() => {
-                $('#success-span').text('')
-            }, 3000);
-            
-            window.loadModules();
-            $('#icon-preview').html('');
-            $('#card-header-text').text('Create Module');
-            $('#module_id').val('');
-        } catch (err) {
-            console.error('Form submit error:', err);
-            $('#general-errors').text('Something went wrong. Check console / network tab.');
-        }
-    });
-
-    // --- Toggle status ---
-    $(document).on('change', '.chkToggle', function () {
-        const moduleId = $(this).data('id');
-        const newStatus = $(this).prop('checked') ? 1 : 0;
-
-        $.post('/superadmin/Create Menu/update-status', {
-            id: moduleId,
-            status: newStatus,
-            _token: $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content')
-        }, function (res) {
-            console.log("Status updated:", res);
-        }).fail(function (xhr, status, err) {
-            console.error("Error updating status:", status, err, xhr.responseText);
         });
+
+        // --- Toggle status ---
+        $(document).on('change', '.chkToggle', function () {
+            const moduleId = $(this).data('id');
+            const newStatus = $(this).prop('checked') ? 1 : 0;
+
+            $.post('/superadmin/Create Menu/update-status', {
+                id: moduleId,
+                status: newStatus,
+                _token: $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content')
+            }, function (res) {
+                console.log("Status updated:", res);
+            }).fail(function (xhr, status, err) {
+                console.error("Error updating status:", status, err, xhr.responseText);
+            });
+        });
+
+        // --- Edit button click ---
+        $(document).on('click', '.edit-btn', function () {
+            const $b = $(this);
+            const id = $b.data('id');
+            const name = $b.data('name');
+            const icon = $b.data('icon');
+
+            $('#createmenu').modal('show');
+            $('#card-header-text').text('Edit Module');
+            $('#module_id').val(id);
+            $('#module_name').val(name);
+            $('#icon').val(icon);
+            $('#icon-preview').html(`<i class="${icon}"></i>`);
+            $('#success-span').text('');
+        });
+
     });
 
-    // --- Edit button click ---
-    $(document).on('click', '.edit-btn', function () {
-        const $b = $(this);
-        const id = $b.data('id');
-        const name = $b.data('name');
-        const icon = $b.data('icon');
-
-        $('#createmenu').modal('show');
-        $('#card-header-text').text('Edit Module');
-        $('#module_id').val(id);
-        $('#module_name').val(name);
-        $('#icon').val(icon);
-        $('#icon-preview').html(`<i class="${icon}"></i>`);
-        $('#success-span').text('');
-    });
-    
-});
 
 
+    $(function () {
+        $(document).on('click', '.delete-btn', function () {
+            const moduleId = $(this).data('id');
+            $('#deleteConfirmModal').data('id', moduleId).modal('show');
+        });
 
-$(function () {
-    $(document).on('click', '.delete-btn', function () {
-        const moduleId = $(this).data('id');
-        $('#deleteConfirmModal').data('id', moduleId).modal('show');
-    });
+        // Assuming you have a confirm button inside your modal
+        $('#confirmDeleteBtn').on('click', function () {
+            const moduleId = $('#deleteConfirmModal').data('id');
+            deleteModule(moduleId);
+        });
 
-    // Assuming you have a confirm button inside your modal
-  $('#confirmDeleteBtn').on('click', function () {
-    const moduleId = $('#deleteConfirmModal').data('id');
-    deleteModule(moduleId);
-});
+        function deleteModule(moduleId) {
+            const token = $('meta[name="csrf-token"]').attr('content'); // safer to use meta tag
 
-function deleteModule(moduleId) {
-    const token = $('meta[name="csrf-token"]').attr('content'); // safer to use meta tag
+            $.ajax({
+                url: '/superadmin/CreateMenu/delete-module/' + moduleId,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                success: function (response) {
 
-    $.ajax({
-        url: '/superadmin/CreateMenu/delete-module/' + moduleId,
-        type: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': token
-        },
-        success: function(response) {
-         
-            $('#deleteConfirmModal').modal('hide');
+                    $('#deleteConfirmModal').modal('hide');
 
-            // Refresh DataTable
-            if (window.loadModules) window.loadModules();
-        },
-        error: function(xhr) {
-            let msg = 'Error deleting module';
-            if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
-            alert(msg);
-            console.error(xhr);
+                    // Refresh DataTable
+                    if (window.loadModules) window.loadModules();
+                },
+                error: function (xhr) {
+                    let msg = 'Error deleting module';
+                    if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+                    alert(msg);
+                    console.error(xhr);
+                }
+            });
         }
+
+
     });
-}
-
-
-});
 
 
 </script>
@@ -224,21 +222,23 @@ function deleteModule(moduleId) {
 
 
 
-    <div class="modal" tabindex="-1" role="dialog" id="deleteConfirmModal" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal" tabindex="-1" role="dialog" id="deleteConfirmModal" data-bs-backdrop="static"
+        data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
-             <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Confirm Delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this module?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
-        <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="deleteModule()">Delete</button>
-      </div>
-    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this module?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn"
+                        onclick="deleteModule()">Delete</button>
+                </div>
+            </div>
         </div>
     </div>
 @endpush

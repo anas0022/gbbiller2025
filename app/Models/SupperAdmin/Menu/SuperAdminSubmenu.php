@@ -17,14 +17,15 @@ class SuperAdminSubmenu extends Model
         'sub_route',
         'status',
     ];
-   public function submenu() {
-    return $this->belongsTo(SuperAdminMenu::class ,'menu_id','id')
-        ->select('id','Menuname');
-}
+    public function submenu()
+    {
+        return $this->belongsTo(SuperAdminMenu::class, 'menu_id', 'id')
+            ->select('id', 'Menuname');
+    }
 
-      public function module()
-{
-    return $this->belongsTo(SuperAdminModules::class, 'menu_module', 'id')
-        ->select('id', 'modulename', 'icon');
-}
+    public function module()
+    {
+        return $this->belongsTo(SuperAdminModules::class, 'menu_module', 'id')
+            ->select('id', 'modulename', 'icon');
+    }
 }

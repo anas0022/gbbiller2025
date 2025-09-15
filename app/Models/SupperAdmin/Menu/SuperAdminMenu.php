@@ -17,10 +17,10 @@ class SuperAdminMenu extends Model
     ];
 
     // Relationship: each menu belongs to one module
-  public function module()
-{
-    return $this->belongsTo(SuperAdminModules::class, 'Module_id', 'id')
-        ->select('id', 'modulename', 'icon');
-}
+    public function module()
+    {
+        return $this->belongsTo(SuperAdminModules::class, 'Module_id', 'id')
+            ->select('id', 'modulename', 'icon');
+    }
 
 }

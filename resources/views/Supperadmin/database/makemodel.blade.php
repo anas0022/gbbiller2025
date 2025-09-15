@@ -1,6 +1,6 @@
 <div class="btn-actions-pane-right" style="display:flex; justify-content:flex-end; margin-bottom:10px; width:100%;">
-    <button class="btn-shine btn-wide btn-pill btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#makemodel"
-        onclick="console.log('Make Model button clicked')">
+    <button class="btn-shine btn-wide btn-pill btn btn-warning btn-sm" data-bs-toggle="modal"
+        data-bs-target="#makemodel" onclick="console.log('Make Model button clicked')">
         <i class="fa fa-cog fa-spin mr-2"></i> Make Model
     </button>
     <button class="btn-shine btn-wide btn-pill btn btn-info btn-sm ml-2" onclick="testDeleteRoute()">
@@ -36,17 +36,17 @@
 
 
 <script>
-    $(function() {
+    $(function () {
         console.log("jQuery loaded and document ready");
 
         // Test the route first
         $.ajax({
             url: "/test-models",
             type: "GET",
-            success: function(data) {
+            success: function (data) {
                 console.log("Test models response:", data);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("Test models error:", error);
             }
         });
@@ -55,7 +55,7 @@
         $.ajax({
             url: "/all-models",
             type: "GET",
-            success: function(response) {
+            success: function (response) {
                 console.log("Data received:", response.data);
 
                 // Clear existing data
@@ -63,7 +63,7 @@
 
                 // Populate table manually
                 if (response.data && response.data.length > 0) {
-                    response.data.forEach(function(model, index) {
+                    response.data.forEach(function (model, index) {
                         var row = `
                             <tr>
                                 <td>${index + 1}</td>
@@ -92,7 +92,7 @@
                     info: true
                 });
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("Error loading models:", error);
                 $('.model-table tbody').append(
                     '<tr><td colspan="4" class="text-center text-danger">Error loading data</td></tr>'
@@ -103,7 +103,7 @@
 
     // Test function for delete route
     function testDeleteRoute() {
-     
+
 
         // Test with a known model class
         const testModelClass = 'App\\Models\\Auth\\UserModel';
@@ -111,11 +111,11 @@
         $.ajax({
             url: '/test-model-path/' + encodeURIComponent(testModelClass),
             type: 'GET',
-            success: function(response) {
+            success: function (response) {
                 console.log('Test model path response:', response);
                 alert('Test completed. Check console for details.');
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.error('Test model path error:', xhr);
                 alert('Test failed. Check console for details.');
             }
@@ -174,7 +174,7 @@
 
 
     <script>
-        $(document).on('submit', '#createModelForm', function(e) {
+        $(document).on('submit', '#createModelForm', function (e) {
             console.log("Form submission triggered");
             e.preventDefault();
 
@@ -209,7 +209,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
                 },
-                success: function(response) {
+                success: function (response) {
                     showMessage(response.message || 'Model created successfully!', 'success');
                     $('#createModelForm')[0].reset();
 
@@ -219,27 +219,27 @@
                     table.row.add([
                         table.rows().count() + 1, // auto increment row number
                         response
-                        .model_name, // model name (you should send this back from Laravel)
+                            .model_name, // model name (you should send this back from Laravel)
                         response.full_namespace, // full namespace (send this back too)
                         `<button class="btn btn-danger btn-sm delete-model-btn" data-id="${response.id}" data-model="${response.model_name}">
-                                <i class="fa fa-trash"></i> Delete
-                         </button>`
+                                    <i class="fa fa-trash"></i> Delete
+                             </button>`
 
-                    ]).draw(false); 
-                       
-                  loadTablesStatus();
-                    setTimeout(function() {
+                    ]).draw(false);
+
+                    loadTablesStatus();
+                    setTimeout(function () {
                         $('#makemodel').modal('hide');
                     }, 1500);
                 },
 
-                error: function(xhr) {
+                error: function (xhr) {
                     let errorMessage = 'An error occurred while creating the model';
 
                     if (xhr.responseJSON) {
                         if (xhr.responseJSON.errors) {
                             // Handle validation errors
-                            Object.keys(xhr.responseJSON.errors).forEach(function(field) {
+                            Object.keys(xhr.responseJSON.errors).forEach(function (field) {
                                 showFieldError(field, xhr.responseJSON.errors[field][0]);
                             });
                             return;
@@ -250,8 +250,8 @@
 
                     showMessage(errorMessage, 'danger');
                 },
-                complete: function() {
-                 
+                complete: function () {
+
                     submitBtn.prop('disabled', false).html(originalText);
                 }
             });
@@ -260,16 +260,16 @@
         function showMessage(message, type = 'success') {
             const container = $('#formMessage');
             container.html(`
-                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                    <i class="fa fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `);
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        <i class="fa fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2"></i>
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
 
             // Auto-hide success messages after 5 seconds
             if (type === 'success') {
-                setTimeout(function() {
+                setTimeout(function () {
                     container.find('.alert').fadeOut();
                 }, 5000);
             }
@@ -290,21 +290,21 @@
         }
 
         // Clear validation messages when modal is closed
-        $('#makemodel').on('hidden.bs.modal', function() {
+        $('#makemodel').on('hidden.bs.modal', function () {
             console.log('Modal closed');
             clearValidationMessages();
             $('#createModelForm')[0].reset();
         });
 
         // Test modal opening
-        $('#makemodel').on('shown.bs.modal', function() {
+        $('#makemodel').on('shown.bs.modal', function () {
             console.log('Modal opened');
         });
 
         let deleteBtn = null; // store clicked delete button
         let modelClass = null;
 
-        $(document).on('click', '.delete-model-btn', function() {
+        $(document).on('click', '.delete-model-btn', function () {
             deleteBtn = $(this);
             modelClass = deleteBtn.data('model');
             const modelName = modelClass.split('\\').pop();
@@ -315,7 +315,7 @@
             // Show modal
             $('#deleteConfirmModal').modal('show');
         });
-        $('#confirmDeleteBtn').on('click', function() {
+        $('#confirmDeleteBtn').on('click', function () {
             if (!modelClass || !deleteBtn) return;
 
             const originalHtml = deleteBtn.html();
@@ -331,7 +331,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'Accept': 'application/json'
                 },
-                success: function(response) {
+                success: function (response) {
                     $('.model-table').DataTable().row(deleteBtn.parents('tr')).remove().draw();
 
                     $('#successMessage').text(response.message || 'Model deleted successfully!').show()
@@ -339,14 +339,14 @@
 
                     showMessage(response.message || 'Model deleted successfully!', 'success');
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     let errorMessage = 'An error occurred while deleting the model';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
                     }
                     showMessage(errorMessage, 'danger');
                 },
-                complete: function() {
+                complete: function () {
                     deleteBtn.prop('disabled', false).html(originalHtml);
                     $('#deleteConfirmModal').modal('hide'); // close modal
                     deleteBtn = null; // reset reference

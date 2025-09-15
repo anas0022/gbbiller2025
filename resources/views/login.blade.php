@@ -45,7 +45,8 @@
                             <span class="input-icon">
                                 <ion-icon name="lock-closed"></ion-icon>
                             </span>
-                            <input id="password" name="password" type="password" class="form-input" placeholder=" " minlength="6">
+                            <input id="password" name="password" type="password" class="form-input" placeholder=" "
+                                minlength="6">
                             <label class="input-label">Password</label>
                             <span class="password-toggle" onclick="togglePassword()">
                                 <ion-icon name="eye" id="eye-icon"></ion-icon>
@@ -73,50 +74,51 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-    {{-- <script>
-const inp = document.getElementById('numOnly');
+    {{--
+    <script>
+        const inp = document.getElementById('numOnly');
 
-// Remove any non-digit characters as the user types
-inp.addEventListener('input', (e) => {
-  const cleaned = e.target.value.replace(/\D+/g, ''); // keep digits only
-  if (cleaned !== e.target.value) {
-    e.target.value = cleaned;
-  }
-});
+        // Remove any non-digit characters as the user types
+        inp.addEventListener('input', (e) => {
+            const cleaned = e.target.value.replace(/\D+/g, ''); // keep digits only
+            if (cleaned !== e.target.value) {
+                e.target.value = cleaned;
+            }
+        });
 
-// Prevent nondigit keys (allows navigation keys)
-inp.addEventListener('keydown', (e) => {
-  // Allow: backspace, del, arrows, home, end, tab
-  const allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Home','End','Tab'];
-  if (allowed.includes(e.key)) return;
-  // Block if not digit
-  if (!/^\d$/.test(e.key)) e.preventDefault();
-});
+        // Prevent nondigit keys (allows navigation keys)
+        inp.addEventListener('keydown', (e) => {
+            // Allow: backspace, del, arrows, home, end, tab
+            const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Tab'];
+            if (allowed.includes(e.key)) return;
+            // Block if not digit
+            if (!/^\d$/.test(e.key)) e.preventDefault();
+        });
 
-// Prevent non-digit paste
-inp.addEventListener('paste', (e) => {
-  const paste = (e.clipboardData || window.clipboardData).getData('text');
-  if (/\D/.test(paste)) {
-    e.preventDefault();
-    // Optionally insert cleaned digits:
-    const cleaned = paste.replace(/\D+/g, '');
-    if (cleaned) {
-      // insert at cursor position
-      const { selectionStart: start, selectionEnd: end } = inp;
-      const val = inp.value;
-      inp.value = val.slice(0, start) + cleaned + val.slice(end);
-      inp.setSelectionRange(start + cleaned.length, start + cleaned.length);
-    }
-  }
-});
-</script> --}}
+        // Prevent non-digit paste
+        inp.addEventListener('paste', (e) => {
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            if (/\D/.test(paste)) {
+                e.preventDefault();
+                // Optionally insert cleaned digits:
+                const cleaned = paste.replace(/\D+/g, '');
+                if (cleaned) {
+                    // insert at cursor position
+                    const { selectionStart: start, selectionEnd: end } = inp;
+                    const val = inp.value;
+                    inp.value = val.slice(0, start) + cleaned + val.slice(end);
+                    inp.setSelectionRange(start + cleaned.length, start + cleaned.length);
+                }
+            }
+        });
+    </script> --}}
 
     <script>
         // Password toggle functionality
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eye-icon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 eyeIcon.setAttribute('name', 'eye-off');
@@ -127,7 +129,7 @@ inp.addEventListener('paste', (e) => {
         }
 
         // Form submission with loading state
-        document.getElementById("loginForm").addEventListener("submit", async function(e) {
+        document.getElementById("loginForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const submitBtn = document.querySelector('.login-btn');
@@ -141,7 +143,7 @@ inp.addEventListener('paste', (e) => {
             // Clear previous errors
             document.getElementById("general-errors").innerText = "";
             document.getElementById("general-errors").classList.remove('show');
-            
+
             // Clear field-specific errors
             const errorElements = document.querySelectorAll('.error-message');
             errorElements.forEach(el => {
@@ -196,7 +198,7 @@ inp.addEventListener('paste', (e) => {
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const inputs = document.querySelectorAll('.form-input');
 
             function updateInputState(input) {
@@ -214,9 +216,9 @@ inp.addEventListener('paste', (e) => {
                 }
             }
 
-            inputs.forEach(function(input) {
-                ['input', 'change', 'blur', 'focus'].forEach(function(evt) {
-                    input.addEventListener(evt, function() {
+            inputs.forEach(function (input) {
+                ['input', 'change', 'blur', 'focus'].forEach(function (evt) {
+                    input.addEventListener(evt, function () {
                         updateInputState(input);
                     });
                 });
@@ -225,17 +227,17 @@ inp.addEventListener('paste', (e) => {
             });
 
             // Handle delayed autofill
-            setTimeout(function() {
+            setTimeout(function () {
                 inputs.forEach(updateInputState);
             }, 400);
 
             // Add focus/blur effects
-            inputs.forEach(function(input) {
-                input.addEventListener('focus', function() {
+            inputs.forEach(function (input) {
+                input.addEventListener('focus', function () {
                     this.parentElement.style.transform = 'translateY(-1px)';
                 });
-                
-                input.addEventListener('blur', function() {
+
+                input.addEventListener('blur', function () {
                     this.parentElement.style.transform = 'translateY(0)';
                 });
             });

@@ -1,4 +1,3 @@
-
 <?php
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -106,13 +105,13 @@ Route::post('/make-model', function (Request $request) {
 
         $output = Artisan::output();
 
-     return response()->json([
-    'status' => 'success',
-    'message' => 'Model created successfully',
-    'model_name' => $request->model_name,
- 'id' => Str::snake(class_basename($request->model_name)) . '_id',
-    'full_namespace' => str_replace('/', '\\', $request->model_name), // convert / to \
-]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Model created successfully',
+            'model_name' => $request->model_name,
+            'id' => Str::snake(class_basename($request->model_name)) . '_id',
+            'full_namespace' => str_replace('/', '\\', $request->model_name), // convert / to \
+        ]);
 
     } catch (\Throwable $e) {
         return response()->json([
@@ -164,7 +163,7 @@ Route::post('/add-columns', function (Request $request) {
     // 🔍 Find migration file by partial name
     $migrationPath = collect(File::files(database_path('migrations')))
         ->first(fn($file) => Str::contains($file->getFilename(), $migrationName));
-  
+
     if (!$migrationPath) {
         return response()->json([
             'status' => 'error',
@@ -212,11 +211,11 @@ Route::post('/add-columns', function (Request $request) {
     return response()->json([
         'status' => 'success',
         'message' => "✅ Columns added to migration file `$migrationName`.",
-       'tablename' => Str::afterLast($migrationName, 'create_') ? Str::afterLast($migrationName, 'create_') : Str::beforeLast($migrationName, '_table'),
+        'tablename' => Str::afterLast($migrationName, 'create_') ? Str::afterLast($migrationName, 'create_') : Str::beforeLast($migrationName, '_table'),
         'migration_file' => $migrationPath->getFilename(),
         'column_count' => count($validated['columns']),
-       
-        
+
+
     ]);
 });
 Route::get('/all-models', function () {
@@ -259,11 +258,11 @@ Route::get('/all-models', function () {
 Route::get('/test-models', function () {
     $modelFiles = File::allFiles(app_path('Models'));
     $result = [];
-    
+
     foreach ($modelFiles as $file) {
         $relativePath = $file->getRelativePathname();
         $class = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
-        
+
         $result[] = [
             'file' => $file->getPathname(),
             'relative_path' => $relativePath,
@@ -271,7 +270,7 @@ Route::get('/test-models', function () {
             'class_exists' => class_exists($class)
         ];
     }
-    
+
     return response()->json($result);
 });
 
@@ -279,14 +278,14 @@ Route::get('/test-models', function () {
 Route::get('/test-model-path/{modelClass}', function ($modelClass) {
     $relativePath = str_replace('App\\Models\\', '', $modelClass);
     $relativePath = str_replace('\\', '/', $relativePath);
-    
+
     $alternativePaths = [
         'path1' => app_path('Models/' . $relativePath . '.php'),
         'path2' => app_path('Models\\' . str_replace('/', '\\', $relativePath) . '.php'),
         'path3' => base_path('app/Models/' . $relativePath . '.php'),
         'path4' => base_path('app\\Models\\' . str_replace('/', '\\', $relativePath) . '.php')
     ];
-    
+
     $results = [];
     foreach ($alternativePaths as $key => $path) {
         $results[$key] = [
@@ -294,7 +293,7 @@ Route::get('/test-model-path/{modelClass}', function ($modelClass) {
             'exists' => File::exists($path)
         ];
     }
-    
+
     return response()->json([
         'model_class' => $modelClass,
         'relative_path' => $relativePath,
@@ -368,7 +367,7 @@ Route::get('/migrated-tables', function () {
         if (class_exists($class)) {
             $modelInstance = new $class;
             $table = $modelInstance->getTable();
-            
+
             // Only include migrated tables
             if (Schema::hasTable($table)) {
                 $columns = Schema::getColumnListing($table);
@@ -402,7 +401,7 @@ Route::post('/add-columns-to-table', function (Request $request) {
     ]);
 
     $tableName = $validated['table_name'];
-    
+
     // Check if table exists
     if (!Schema::hasTable($tableName)) {
         return response()->json([
@@ -508,7 +507,7 @@ Route::post('/delete-columns-from-table', function (Request $request) {
 
     $tableName = $validated['table_name'];
     $columnsToDelete = $validated['columns'];
-    
+
     // Check if table exists
     if (!Schema::hasTable($tableName)) {
         return response()->json([
@@ -520,7 +519,7 @@ Route::post('/delete-columns-from-table', function (Request $request) {
     // Check if all columns exist
     $existingColumns = Schema::getColumnListing($tableName);
     $nonExistentColumns = array_diff($columnsToDelete, $existingColumns);
-    
+
     if (!empty($nonExistentColumns)) {
         return response()->json([
             'status' => 'error',
@@ -589,7 +588,7 @@ Route::post('/delete-model', function (Request $request) {
     ]);
 
     $modelClass = $validated['model_class'];
-    
+
     try {
         // Check if model class exists
         if (!class_exists($modelClass)) {
@@ -646,7 +645,7 @@ return new class extends Migration
         $relativePath = str_replace('App\\Models\\', '', $modelClass);
         $relativePath = str_replace('\\', '/', $relativePath);
         $modelPath = app_path('Models/' . $relativePath . '.php');
-        
+
         \Log::info('Model deletion attempt:', [
             'model_class' => $modelClass,
             'relative_path' => $relativePath,
@@ -654,7 +653,7 @@ return new class extends Migration
             'file_exists' => File::exists($modelPath),
             'app_path' => app_path('Models')
         ]);
-        
+
         // Also try alternative path calculations
         $alternativePaths = [
             app_path('Models/' . $relativePath . '.php'),
@@ -662,10 +661,10 @@ return new class extends Migration
             base_path('app/Models/' . $relativePath . '.php'),
             base_path('app\\Models\\' . str_replace('/', '\\', $relativePath) . '.php')
         ];
-        
+
         $modelFileDeleted = false;
         $deletedPath = null;
-        
+
         foreach ($alternativePaths as $altPath) {
             if (File::exists($altPath)) {
                 File::delete($altPath);
@@ -675,7 +674,7 @@ return new class extends Migration
                 break;
             }
         }
-        
+
         if (!$modelFileDeleted) {
             \Log::warning('Model file not found in any of these paths:', $alternativePaths);
         }
@@ -723,7 +722,7 @@ Route::post('/delete-table', function (Request $request) {
     ]);
 
     $tableName = $validated['table_name'];
-    
+
     try {
         // Check if table exists
         if (!Schema::hasTable($tableName)) {
@@ -736,11 +735,11 @@ Route::post('/delete-table', function (Request $request) {
         // Find the model that corresponds to this table
         $modelFiles = File::allFiles(app_path('Models'));
         $modelToDelete = null;
-        
+
         foreach ($modelFiles as $file) {
             $relativePath = $file->getRelativePathname();
             $class = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
-            
+
             if (class_exists($class)) {
                 $modelInstance = new $class;
                 if ($modelInstance->getTable() === $tableName) {

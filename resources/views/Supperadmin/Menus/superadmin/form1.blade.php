@@ -20,30 +20,29 @@
         </p>
     </div>
 
-    <button type="submit" class="btn btn-primary" >Create Module</button>
+    <button type="submit" class="btn btn-primary">Create Module</button>
     <button type="button" class="btn btn-secondary" id="closemodal">Close</button>
 </form>
 
 
 <script>
-  
-// Font Awesome icon preview
-document.getElementById('icon').addEventListener('input', function() {
-    const preview = document.getElementById('icon-preview');
-    const errorMsg = document.getElementById('icon-error');
-    const className = this.value.trim();
 
-    preview.innerHTML = `<i class="${className}"></i>`;
-    const iconEl = preview.querySelector("i");
-    const style = window.getComputedStyle(iconEl, '::before');
-    const hasIcon = style && style.content !== 'none' && style.content !== '';
+    // Font Awesome icon preview
+    document.getElementById('icon').addEventListener('input', function () {
+        const preview = document.getElementById('icon-preview');
+        const errorMsg = document.getElementById('icon-error');
+        const className = this.value.trim();
 
-    if (hasIcon) {
-        errorMsg.style.display = "none";
-    } else {
-        errorMsg.style.display = "inline";
-    }
-});
+        preview.innerHTML = `<i class="${className}"></i>`;
+        const iconEl = preview.querySelector("i");
+        const style = window.getComputedStyle(iconEl, '::before');
+        const hasIcon = style && style.content !== 'none' && style.content !== '';
+
+        if (hasIcon) {
+            errorMsg.style.display = "none";
+        } else {
+            errorMsg.style.display = "inline";
+        }
+    });
 
 </script>
-  

@@ -2,7 +2,7 @@
     style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
     <p>Super Admin Menu</p>
     <button type="button" class="btn btn-primary" id="addmenubtn">
-         <i class="fa fa-plus" aria-hidden="true"></i>
+        <i class="fa fa-plus" aria-hidden="true"></i>
         Add Module
     </button>
 </div>
@@ -20,8 +20,8 @@
                             <span id="card-header-text">Create Module</span>
                             <div class="btn-actions-pane-right">
                                 <div role="group" class="btn-group-sm nav btn-group" style="width:auto;">
-                                    <a data-bs-toggle="tab" href="#tab-eg1-0"
-                                        class="btn-shadow btn btn-primary active"> Module</a>
+                                    <a data-bs-toggle="tab" href="#tab-eg1-0" class="btn-shadow btn btn-primary active">
+                                        Module</a>
                                     <a data-bs-toggle="tab" href="#tab-eg1-1" class="btn-shadow btn btn-primary">
                                         Menu</a>
                                     <a data-bs-toggle="tab" href="#tab-eg1-2" class="btn-shadow btn btn-primary"> Sub
@@ -51,44 +51,44 @@
         </div>
     </div>
     <script>
-        document.getElementById('closemodal').addEventListener('click', function() {
+        document.getElementById('closemodal').addEventListener('click', function () {
             var myModalEl = document.getElementById('createmenu');
             var modal = bootstrap.Modal.getInstance(myModalEl);
             modal.hide();
         });
 
 
-        document.getElementById('closemodal2').addEventListener('click', function() {
+        document.getElementById('closemodal2').addEventListener('click', function () {
             var myModalEl = document.getElementById('createmenu');
             var modal = bootstrap.Modal.getInstance(myModalEl);
             modal.hide();
         });
-        document.getElementById('closemodal3').addEventListener('click', function() {
+        document.getElementById('closemodal3').addEventListener('click', function () {
             var myModalEl = document.getElementById('createmenu');
             var modal = bootstrap.Modal.getInstance(myModalEl);
             modal.hide();
         });
 
- $(document).on('click', '#addmenubtn', function () {
-        var myModal = new bootstrap.Modal(document.getElementById('createmenu'));
-            myModal.show();
- });
-
-   /*      document.getElementById('addmenubtn').addEventListener('click', function() {
-           
+        $(document).on('click', '#addmenubtn', function () {
             var myModal = new bootstrap.Modal(document.getElementById('createmenu'));
             myModal.show();
         });
- */
+
+        /*      document.getElementById('addmenubtn').addEventListener('click', function() {
+
+                 var myModal = new bootstrap.Modal(document.getElementById('createmenu'));
+                 myModal.show();
+             });
+      */
 
         // when modal opens, set default text = Create Module
-        document.getElementById('createmenu').addEventListener('shown.bs.modal', function() {
+        document.getElementById('createmenu').addEventListener('shown.bs.modal', function () {
             updateHeaderText('#tab-eg1-0'); // default first tab
         });
 
         // when tabs change, update header
-        document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(function(tab) {
-            tab.addEventListener('shown.bs.tab', function(e) {
+        document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(function (tab) {
+            tab.addEventListener('shown.bs.tab', function (e) {
                 let target = e.target.getAttribute("href");
                 updateHeaderText(target);
             });

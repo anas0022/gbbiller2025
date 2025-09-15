@@ -18,47 +18,49 @@ Route::middleware(['auth'])->group(function () use ($allowedIp) {
     })->name('superadmin.menus');
 
     Route::post('/superadmin/Create Menu/superadmin', [App\Http\Controllers\SupperAdmin\SupperAdminModuleController::class, 'StoreModule'])->name('superadmin.menus.store');
-    Route::get('/superadmin/Create Menu/menu-table',[App\Http\Controllers\SupperAdmin\SupperAdminModuleController::class ,'superadminmenu'])->name('superadmin.menus.table');
+    Route::get('/superadmin/Create Menu/menu-table', [App\Http\Controllers\SupperAdmin\SupperAdminModuleController::class, 'superadminmenu'])->name('superadmin.menus.table');
     Route::post('/superadmin/Create Menu/update-status', [App\Http\Controllers\SupperAdmin\SupperAdminModuleController::class, 'updateStatus'])
-    ->name('module.updateStatus');
-    
+        ->name('module.updateStatus');
+
     Route::delete('/superadmin/CreateMenu/delete-module/{id}', [SupperAdminModuleController::class, 'deleteModule'])->name('superadmin.menus.delete');
 
-/* supper admin menu */
+    /* supper admin menu */
 
-Route::post('/superadmin/menu/create',[SupperAdminMenuController::class , 'create_menu'])->name('create.menu');
-Route::get('/get-modules', function(){
-    $module = SuperAdminModules::where('Status' , 1)->get();;
-    return ($module);
-});
-
-
-Route::get('/get-menu/superadmin',function(){
-    $menu = SuperAdminMenu::with('module')->get();
-    return ($menu);
-});
+    Route::post('/superadmin/menu/create', [SupperAdminMenuController::class, 'create_menu'])->name('create.menu');
+    Route::get('/get-modules', function () {
+        $module = SuperAdminModules::where('Status', 1)->get();
+        ;
+        return ($module);
+    });
 
 
- Route::post('/superadmin/menu/update-status', [SupperAdminMenuController::class, 'updateStatus'])
-    ->name('menu.updateStatus');
+    Route::get('/get-menu/superadmin', function () {
+        $menu = SuperAdminMenu::with('module')->get();
+        return ($menu);
+    });
+
+
+    Route::post('/superadmin/menu/update-status', [SupperAdminMenuController::class, 'updateStatus'])
+        ->name('menu.updateStatus');
 
     Route::delete('/superadmin/menu/delete-menu/{id}', [SupperAdminMenuController::class, 'deleteModule'])->name('superadmin.menus.delete');
 
-   Route::get('/get-menu', function(){
-    $menu = SuperAdminMenu::where('Status' , 1)->get();;
-    return ($menu);
-});
-Route::post('/superadmin/submenu/create',[SupperAdminSubMenuController::class , 'create_menu'])->name('create.submenu');
+    Route::get('/get-menu', function () {
+        $menu = SuperAdminMenu::where('Status', 1)->get();
+        ;
+        return ($menu);
+    });
+    Route::post('/superadmin/submenu/create', [SupperAdminSubMenuController::class, 'create_menu'])->name('create.submenu');
 
-Route::get('/get-submenu/superadmin', function () {
-    $menu = SuperAdminSubmenu::with('module')
-        ->with('submenu')
-        ->get();
-    return ($menu);
-});
- Route::post('/superadmin/submenu/update-status', [SupperAdminSubMenuController::class, 'updateStatus'])
-    ->name('submenu.updateStatus');
-Route::delete('/superadmin/menu/delete-submenu/{id}', [SupperAdminSubMenuController::class, 'deleteMenu'])->name('superadmin.submenus.delete');
+    Route::get('/get-submenu/superadmin', function () {
+        $menu = SuperAdminSubmenu::with('module')
+            ->with('submenu')
+            ->get();
+        return ($menu);
+    });
+    Route::post('/superadmin/submenu/update-status', [SupperAdminSubMenuController::class, 'updateStatus'])
+        ->name('submenu.updateStatus');
+    Route::delete('/superadmin/menu/delete-submenu/{id}', [SupperAdminSubMenuController::class, 'deleteMenu'])->name('superadmin.submenus.delete');
 
 });
 

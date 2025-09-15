@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan; // ✅ add this
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 $allowedIp = '127.0.0.1';
 Route::middleware(['auth'])->group(function () use ($allowedIp) {
     Route::group([
@@ -15,10 +15,11 @@ Route::middleware(['auth'])->group(function () use ($allowedIp) {
             return $next($request);
         }
     ], function () {
-require __DIR__.'/database.php';
-require __DIR__.'/supperadmin/dasboard.php';
-require __DIR__.'/supperadmin/menus.php';
-require __DIR__.'/supperadmin/sidebar.php';
+        require __DIR__ . '/database.php';
+        require __DIR__ . '/supperadmin/dasboard.php';
+        require __DIR__ . '/supperadmin/menus.php';
+        require __DIR__ . '/supperadmin/sidebar.php';
 
 
-    });});
+    });
+});

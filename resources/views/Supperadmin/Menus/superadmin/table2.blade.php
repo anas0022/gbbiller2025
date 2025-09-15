@@ -1,5 +1,3 @@
-
-
 <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4" style="margin-top: 10px;">
     <div class="row">
         <div class="col-sm-12">
@@ -26,44 +24,44 @@
 
 
 <script>
-$(function () {
-    // --- DataTable ---
-    var table = $('.menu-table').DataTable({
-        responsive: true,
-        columns: [
-            {data: 'Icon', },
-            { data: 'Menu', orderable: false },
-            {data: 'Module', },
-            { data: 'Route' },
-            { data: 'Status', orderable: false },
-            { data: 'Action', orderable: false }
-        ]
-    });
+    $(function () {
+        // --- DataTable ---
+        var table = $('.menu-table').DataTable({
+            responsive: true,
+            columns: [
+                { data: 'Icon', },
+                { data: 'Menu', orderable: false },
+                { data: 'Module', },
+                { data: 'Route' },
+                { data: 'Status', orderable: false },
+                { data: 'Action', orderable: false }
+            ]
+        });
 
-    // --- loadModules globally so other scripts can call it ---
-    window.loadModules = function () {
-        $.ajax({
-            url: '/get-menu/superadmin',
-            method: 'GET',
-            success: function (response) {
-                table.clear();
+        // --- loadModules globally so other scripts can call it ---
+        window.loadModules = function () {
+            $.ajax({
+                url: '/get-menu/superadmin',
+                method: 'GET',
+                success: function (response) {
+                    table.clear();
 
-                response.forEach(function (module) {
-                    var checked = module.Status == 1 ? 'checked' : '';
+                    response.forEach(function (module) {
+                        var checked = module.Status == 1 ? 'checked' : '';
 
-                    table.row.add({
-                        Icon:`<i class="${module.module.icon} gradient-icon"></i>`,
-                        Menu: module.Menuname,
-                        Module:module.module.modulename,
-                        Route: module.route,
-                        Status: `
+                        table.row.add({
+                            Icon: `<i class="${module.module.icon} gradient-icon"></i>`,
+                            Menu: module.Menuname,
+                            Module: module.module.modulename,
+                            Route: module.route,
+                            Status: `
                             <input type="checkbox" class="chkToggle2" 
                                    data-id="${module.id}"
                                    data-toggle="toggle"
                                    data-on="Active" data-off="Inactive"
                                    data-onstyle="success" data-offstyle="danger" ${checked}>
                         `,
-                        Action: `
+                            Action: `
                             <button class="btn btn-sm btn-primary edit-menu"
                                     data-id="${module.id}"
                                     data-name="${module.Menuname}"
@@ -76,55 +74,55 @@ $(function () {
                               Delete
                             </button>
                         `
+                        });
                     });
-                });
 
-                table.draw();
+                    table.draw();
 
-                if ($.fn.bootstrapToggle) $('.chkToggle2').bootstrapToggle();
-            },
-            error: function (xhr, status, error) {
-                console.error('loadModules AJAX error:', status, error, xhr.responseText);
-            }
-        });
-    };
+                    if ($.fn.bootstrapToggle) $('.chkToggle2').bootstrapToggle();
+                },
+                error: function (xhr, status, error) {
+                    console.error('loadModules AJAX error:', status, error, xhr.responseText);
+                }
+            });
+        };
 
-    // 🔹 Call it once on page load
-    loadModules();
-});
- $(document).on('click', '.edit-menu', function () {
+        // 🔹 Call it once on page load
+        loadModules();
+    });
+    $(document).on('click', '.edit-menu', function () {
 
         const $b = $(this);
         const id = $b.data('id');
         const name = $b.data('name');
         const route = $b.data('icon');
-    const module_id = $b.data('module_id');
+        const module_id = $b.data('module_id');
         $('#createmenu').modal('show');
         $('#card-header-text').text('Edit Menu');
-$('#tab-eg1-0').removeClass('active show');
-$('#tab-eg1-1').addClass('active show');
-$('#tab-eg1-2').removeClass('active show');
-$('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
-$('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
+        $('#tab-eg1-0').removeClass('active show');
+        $('#tab-eg1-1').addClass('active show');
+        $('#tab-eg1-2').removeClass('active show');
+        $('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
+        $('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
 
-$('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'false');
+        $('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'false');
 
-$('#tab-eg2-0').removeClass('active show');
-$('#tab-eg2-1').addClass('active show');
-$('#tab-eg2-2').addClass('active show');
+        $('#tab-eg2-0').removeClass('active show');
+        $('#tab-eg2-1').addClass('active show');
+        $('#tab-eg2-2').addClass('active show');
 
-$('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
-$('a[href="#tab-eg2-1"]').addClass('active').attr('aria-selected', 'true');
-$('a[href="#tab-eg2-2"]').removeClass('active').attr('aria-selected', 'false');
-$('#moduels-for-menu').val(module_id);
+        $('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
+        $('a[href="#tab-eg2-1"]').addClass('active').attr('aria-selected', 'true');
+        $('a[href="#tab-eg2-2"]').removeClass('active').attr('aria-selected', 'false');
+        $('#moduels-for-menu').val(module_id);
         $('#id').val(id);
         $('#Menuname').val(name);
-        $('#route').val(route); 
-      
+        $('#route').val(route);
+
         $('#success-span').text('');
     });
-    
-$(document).on('change', '.chkToggle2', function () {
+
+    $(document).on('change', '.chkToggle2', function () {
         const moduleId = $(this).data('id');
         const newStatus = $(this).prop('checked') ? 1 : 0;
 
@@ -134,50 +132,50 @@ $(document).on('change', '.chkToggle2', function () {
             _token: $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content')
         }, function (res) {
             console.log("Status updated:", res);
-             loadModules();
+            loadModules();
         }).fail(function (xhr, status, err) {
             console.error("Error updating status:", status, err, xhr.responseText);
         });
     });
 
     $(function () {
-    $(document).on('click', '.delete-btn2', function () {
-        const moduleId = $(this).data('id');
-        const menu     = $(this).data('menu');
-        $('#deleteConfirmModal2').data('id', moduleId).modal('show');
-        $('#deleting-menu').text(menu + '?');
-    });
+        $(document).on('click', '.delete-btn2', function () {
+            const moduleId = $(this).data('id');
+            const menu = $(this).data('menu');
+            $('#deleteConfirmModal2').data('id', moduleId).modal('show');
+            $('#deleting-menu').text(menu + '?');
+        });
 
-    // Assuming you have a confirm button inside your modal
-  $('#deleteConfirmModal2').on('click', function () {
-    const moduleId = $('#deleteConfirmModal2').data('id');
-    deleteModule2(moduleId);
-});
+        // Assuming you have a confirm button inside your modal
+        $('#deleteConfirmModal2').on('click', function () {
+            const moduleId = $('#deleteConfirmModal2').data('id');
+            deleteModule2(moduleId);
+        });
 
-function deleteModule2(moduleId) {
-    const token = $('meta[name="csrf-token"]').attr('content'); // safer to use meta tag
+        function deleteModule2(moduleId) {
+            const token = $('meta[name="csrf-token"]').attr('content'); // safer to use meta tag
 
-    $.ajax({
-        url: '/superadmin/menu/delete-menu/' + moduleId,
-        type: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': token
-        },
-        success: function(response) {
-         
-            $('#deleteConfirmModal2').modal('hide');
+            $.ajax({
+                url: '/superadmin/menu/delete-menu/' + moduleId,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                success: function (response) {
 
-            // Refresh DataTable
-            if (window.loadModules) window.loadModules();
-        },
-        error: function(xhr) {
-            let msg = 'Error deleting module';
-            if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
-            alert(msg);
-            console.error(xhr);
+                    $('#deleteConfirmModal2').modal('hide');
+
+                    // Refresh DataTable
+                    if (window.loadModules) window.loadModules();
+                },
+                error: function (xhr) {
+                    let msg = 'Error deleting module';
+                    if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+                    alert(msg);
+                    console.error(xhr);
+                }
+            });
         }
-    });
-}
     });
 </script>
 
@@ -186,21 +184,23 @@ function deleteModule2(moduleId) {
 
 
 
-    <div class="modal" tabindex="-1" role="dialog" id="deleteConfirmModal2" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal" tabindex="-1" role="dialog" id="deleteConfirmModal2" data-bs-backdrop="static"
+        data-bs-keyboard="false">
         <div class="modal-dialog" role="document">
-             <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Confirm Delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this Menu <span id="deleting-menu" class="text-warning"><span>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
-        <button type="button" class="btn btn-danger" id="deleteConfirmModal2" onclick="deleteModule2()">Delete</button>
-      </div>
-    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this Menu <span id="deleting-menu" class="text-warning"><span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteConfirmModal2"
+                        onclick="deleteModule2()">Delete</button>
+                </div>
+            </div>
         </div>
-    </div> 
-@endpush 
+    </div>
+@endpush

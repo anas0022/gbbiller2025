@@ -17,6 +17,7 @@
     padding: 0;
     font-family: "Fira Code", monospace;
   }
+
   body {
     display: flex;
     flex-direction: column;
