@@ -1,0 +1,362 @@
+{
+  "Post Query Snippet": {
+    "prefix": "//post",
+    "body": [
+      "try {",
+      "    $isUpdate = !empty($request->id);",
+      "    $rules = [];",
+      "    if ($isUpdate) {",
+      "        $rules['Menuname'][] = Rule::unique('super_admin_menus', 'Menuname')->ignore($request->id);",
+      "    } else {",
+      "        $rules['Menuname'][] = Rule::unique('super_admin_menus', 'Menuname');",
+      "    }",
+      "    $validator = Validator::make($request->all(), $rules);",
+      "    if ($validator->fails()) {",
+      "        return response()->json([",
+      "            'status' => false,",
+      "            'message' => 'Validation errors',",
+      "            'errors' => $validator->errors()",
+      "        ], 422);",
+      "    }",
+      "    if ($isUpdate) {",
+      "        $module = SuperAdminMenu::findOrFail($request->id);",
+      "        $module->update($validator->validated());",
+      "        $message = 'Menuname updated successfully';",
+      "    } else {",
+      "        SuperAdminMenu::create($validator->validated());",
+      "        $message = 'Menuname added successfully';",
+      "    }",
+      "    return response()->json([",
+      "        'status' => true,",
+      "        'message' => $message",
+      "    ], 201);",
+      "} catch (\\Exception $e) {",
+      "    return response()->json([",
+      "        'status' => false,",
+      "        'message' => 'Something went wrong. Please try again later.',",
+      "        'error' => $e->getMessage()",
+      "    ], 500);",
+      "}"
+    ],
+    "description": "Insert or update post query with validation"
+  },
+
+  "Status Update Snippet": {
+    "prefix": "//status update",
+    "body": [
+      "$module = SuperAdminMenu::findOrFail($request->id);",
+      "$module->status = $request->status;",
+      "$module->save();",
+      "",
+      "return response()->json([",
+      "    'success' => true,",
+      "    'message' => 'Status updated successfully',",
+      "    'status' => $module->status,",
+      "]);"
+    ],
+    "description": "Update menu status"
+  },
+
+  "Delete Table Row" :{
+
+	"prefix": "//delete",
+	"body": [
+
+		"try {",
+          "  $module = SuperAdminMenu::findOrFail($id);",
+           " $module->delete();",
+
+          "  return response()->json([",
+              "  'status' => true,",
+               " 'message' => 'Module deleted successfully'",
+          "  ]);",
+       "} catch (\\Exception $e) {",
+      "    return response()->json([",
+      "        'status' => false,",
+      "        'message' => 'Something went wrong. Please try again later.',",
+      "        'error' => $e->getMessage()",
+      "    ], 500);",
+      "}"
+        
+	],
+
+
+
+  },
+
+  "filling Table": {
+    "prefix": "//Table filling",
+    "body": [
+      "$(function () {",
+      "    // --- DataTable ---",
+      "    var table = $('.module-table').DataTable({",
+      "        responsive: true,",
+      "        columns: [",
+      "            { data: 'icon', orderable: false },",
+      "            { data: 'modulename' },",
+      "            { data: 'status', orderable: false },",
+      "            { data: 'action', orderable: false }",
+      "        ]",
+      "    });",
+      "",
+      "    // --- loadModules globally so other scripts can call it ---",
+      "    window.loadModules = function () {",
+      "        $.ajax({",
+      "            url: '/superadmin/Create Menu/menu-table',",
+      "            method: 'GET',",
+      "            success: function (response) {",
+      "                table.clear();",
+      "",
+      "                response.forEach(function (module) {",
+      "                    var checked = module.status == 1 ? 'checked' : '';",
+      "",
+      "                    table.row.add({",
+      "                        icon: `<i class=\"${module.icon} gradient-icon\"></i>`,",
+      "                        modulename: module.modulename,",
+      "                        status: `",
+      "                            <input type=\"checkbox\" class=\"chkToggle\" ",
+      "                                   data-id=\"${module.id}\"",
+      "                                   data-toggle=\"toggle\"",
+      "                                   data-on=\"Active\" data-off=\"Inactive\"",
+      "                                   data-onstyle=\"success\" data-offstyle=\"danger\" ${checked}>",
+      "                        `,",
+      "                        action: `",
+      "                            <button class=\"btn btn-sm btn-primary edit-btn\"",
+      "                                    data-id=\"${module.id}\"",
+      "                                    data-name=\"${module.modulename}\"",
+      "                                    data-icon=\"${module.icon}\">",
+      "                              Edit",
+      "                            </button>",
+      "                            <button class=\"btn btn-sm btn-danger delete-btn\" data-id=\"${module.id}\">",
+      "                              Delete",
+      "                            </button>",
+      "                        `",
+      "                    });",
+      "                });",
+      "",
+      "                table.draw();",
+      "",
+      "                // Re-init toggle plugin for new rows",
+      "                if ($.fn.bootstrapToggle) $('.chkToggle').bootstrapToggle();",
+      "            },",
+      "            error: function (xhr, status, error) {",
+      "                console.error('loadModules AJAX error:', status, error, xhr.responseText);",
+      "            }",
+      "        });",
+      "    };",
+      "",
+      "    // Initial load + interval refresh",
+      "    loadModules();",
+      "    setInterval(loadModules, 5000);",
+      "});"
+    ],
+    "description": "Fills DataTable with modules via AJAX"
+  },
+
+  "Form Submit Snippet": {
+    "prefix": "//form submit",
+    "body": [
+      "$('#moduleForm').on('submit', async function (e) {",
+      "    e.preventDefault();",
+      "",
+      "    // Clear previous error/success messages",
+      "    $('#modulename_error, #icon_error, #general-errors, #success-span').text('');",
+      "",
+      "    const formData = new FormData(this);",
+      "    const token = $('input[name=\"_token\"]').val() || $('meta[name=\"csrf-token\"]').attr('content');",
+      "",
+      "    try {",
+      "        const response = await fetch(this.action, {",
+      "            method: 'POST',",
+      "            body: formData,",
+      "            headers: {",
+      "                'X-CSRF-TOKEN': token,",
+      "                'Accept': 'application/json'",
+      "            },",
+      "            credentials: 'same-origin'",
+      "        });",
+      "",
+      "        const ct = response.headers.get('content-type') || '';",
+      "        let data = ct.includes('application/json') ? await response.json() : null;",
+      "",
+      "        if (!response.ok) {",
+      "            if (response.status === 419) {",
+      "                $('#general-errors').text('Session expired or CSRF token mismatch.');",
+      "            } else if (data && data.errors) {",
+      "                Object.keys(data.errors).forEach(key => {",
+      "                    $(`#${key}_error`).text(data.errors[key][0]);",
+      "                });",
+      "            } else {",
+      "                $('#general-errors').text(data?.message || `Server error: ${response.status}`);",
+      "            }",
+      "            return;",
+      "        }",
+      "",
+      "        // ✅ Success",
+      "        $('#success-span').html(",
+      "            (data.message || 'Success!') +",
+      "            '<img src=\"/images/success/icons/check-mark.png\" style=\"width:20px;margin-left:10px;\" />'",
+      "        );",
+      "",
+      "        this.reset();",
+      "",
+      "        // Optional redirect",
+      "        if (data?.redirect) {",
+      "            setTimeout(() => window.location.href = data.redirect, 1200);",
+      "        }",
+      "",
+      "        // Auto clear success after 3s",
+      "        setTimeout(() => {",
+      "            $('#success-span').text('');",
+      "        }, 3000);",
+      "",
+      "        // Reload table data",
+      "        if (typeof window.loadModules === 'function') {",
+      "            window.loadModules();",
+      "        }",
+      "",
+      "        // Reset form UI",
+      "        $('#icon-preview').html('');",
+      "        $('#card-header-text').text('Create Module');",
+      "        $('#module_id').val('');",
+      "    } catch (err) {",
+      "        console.error('Form submit error:', err);",
+      "        $('#general-errors').text('Something went wrong. Check console / network tab.');",
+      "    }",
+      "});"
+    ],
+    "description": "AJAX form submit handler with validation and success handling"
+  },
+
+  "Toggle Status Snippet": {
+    "prefix": "//toggle status",
+    "body": [
+      "$(document).on('change', '.chkToggle', function () {",
+      "    const moduleId = $(this).data('id');",
+      "    const newStatus = $(this).prop('checked') ? 1 : 0;",
+      "",
+      "    $.post('/superadmin/Create Menu/update-status', {",
+      "        id: moduleId,",
+      "        status: newStatus,",
+      "        _token: $('input[name=\"_token\"]').val() || $('meta[name=\"csrf-token\"]').attr('content')",
+      "    }, function (res) {",
+      "        console.log(\"Status updated:\", res);",
+      "    }).fail(function (xhr, status, err) {",
+      "        console.error(\"Error updating status:\", status, err, xhr.responseText);",
+      "    });",
+      "});"
+    ],
+    "description": "Handles status toggle (active/inactive) via AJAX"
+  },
+
+  
+  "Edit Table Snippet": {
+    "prefix": "//edit table",
+    "body": [
+      "$(document).on('click', '.edit-btn', function () {",
+      "    const $b = $(this);",
+      "    const id = $b.data('id');",
+      "    const name = $b.data('name');",
+      "    const icon = $b.data('icon');",
+      "",
+      "    $('#createmenu').modal('show');",
+      "    $('#card-header-text').text('Edit Module');",
+      "    $('#module_id').val(id);",
+      "    $('#module_name').val(name);",
+      "    $('#icon').val(icon);",
+      "    $('#icon-preview').html(`<i class=\"${icon}\"></i>`);",
+      "    $('#success-span').text('');",
+      "});"
+    ],
+    "description": "Handles edit button click to populate modal with module data"
+  },
+  
+  "Delete Module Snippet": {
+    "prefix": "//delete module",
+    "body": [
+      "$(function () {",
+      "    $(document).on('click', '.delete-btn', function () {",
+      "        const moduleId = $(this).data('id');",
+      "        $('#deleteConfirmModal').data('id', moduleId).modal('show');",
+      "    });",
+      "",
+      "    // Confirm delete button inside modal",
+      "    $('#confirmDeleteBtn').on('click', function () {",
+      "        const moduleId = $('#deleteConfirmModal').data('id');",
+      "        deleteModule(moduleId);",
+      "    });",
+      "",
+      "    function deleteModule(moduleId) {",
+      "        const token = $('meta[name=\"csrf-token\"]').attr('content');",
+      "",
+      "        $.ajax({",
+      "            url: '/superadmin/CreateMenu/delete-module/' + moduleId,",
+      "            type: 'DELETE',",
+      "            headers: {",
+      "                'X-CSRF-TOKEN': token",
+      "            },",
+      "            success: function (response) {",
+      "                $('#deleteConfirmModal').modal('hide');",
+      "                // Refresh DataTable",
+      "                if (window.loadModules) window.loadModules();",
+      "            },",
+      "            error: function (xhr) {",
+      "                let msg = 'Error deleting module';",
+      "                if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;",
+      "                alert(msg);",
+      "                console.error(xhr);",
+      "            }",
+      "        });",
+      "    }",
+      "});"
+    ],
+    "description": "Handles module deletion with confirm modal and AJAX"
+  },
+
+
+  "Route Get": {
+    "prefix": "//get route",
+    "body": [
+      "Route::get('/superadmin/Create Menu/menu-table', [App\\Http\\Controllers\\SupperAdmin\\SupperAdminModuleController::class, 'index'])->name('superadmin.menus.index');"
+    ],
+    "description": "GET route for listing modules"
+  },
+
+  "Route Post": {
+    "prefix": "//post route",
+    "body": [
+      "Route::post('/superadmin/Create Menu/superadmin', [App\\Http\\Controllers\\SupperAdmin\\SupperAdminModuleController::class, 'StoreModule'])->name('superadmin.menus.store');"
+    ],
+    "description": "POST route for creating/updating modules"
+  },
+
+  "Route Delete": {
+    "prefix": "//delete route",
+    "body": [
+      "Route::delete('/superadmin/CreateMenu/delete-module/{id}', [App\\Http\\Controllers\\SupperAdmin\\SupperAdminModuleController::class, 'destroy'])->name('superadmin.menus.delete');"
+    ],
+    "description": "DELETE route for deleting modules"
+  },
+  "Print json": {
+	"prefix": "//print json",
+	"body": [
+		 "   Route::get('/get-menu/superadmin', function () {",
+        "$menu = SuperAdminMenu::with('module')->get();",
+        "return ($menu);",
+    "});",
+
+	],
+  }
+}
+
+
+
+
+
+
+
+
+
+
+  
+
