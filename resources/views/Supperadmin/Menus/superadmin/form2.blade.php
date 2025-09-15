@@ -99,7 +99,30 @@ $.ajax({
             // Success
             $('#success-spans').html((data.message || 'Success!') + '<img src="/images/success/icons/check-mark.png" style="width:20px;margin-left:10px;" />');
             loadModules();
+                setTimeout(() => {
+                $('#success-spans').text('')
+            }, 3000);
+              $('#Menuname').val('');
+           
+             $('#route').val('');
+
+              $('#moduels-for-menu').val('');
          
+$('#tab-eg1-0').removeClass('active show');
+$('#tab-eg1-1').addClass('active show');
+$('#tab-eg1-2').removeClass('active show');
+$('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
+
+$('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'false');
+
+$('#tab-eg2-0').removeClass('active show');
+$('#tab-eg2-1').addClass('active show');
+$('#tab-eg2-2').removeClass('active show');
+
+$('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg2-1"]').addClass('active').attr('aria-selected', 'true');
+$('a[href="#tab-eg2-2"]').removeClass('active').attr('aria-selected', 'false');
         } catch (err) {
             console.error('Form submit error:', err);
             $('#general-error').text('Something went wrong. Check console / network tab.');

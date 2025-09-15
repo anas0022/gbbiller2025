@@ -103,9 +103,19 @@ $(function () {
         $('#card-header-text').text('Edit Menu');
 $('#tab-eg1-0').removeClass('active show');
 $('#tab-eg1-1').addClass('active show');
-
+$('#tab-eg1-2').removeClass('active show');
 $('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
 $('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
+
+$('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'false');
+
+$('#tab-eg2-0').removeClass('active show');
+$('#tab-eg2-1').addClass('active show');
+$('#tab-eg2-2').addClass('active show');
+
+$('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg2-1"]').addClass('active').attr('aria-selected', 'true');
+$('a[href="#tab-eg2-2"]').removeClass('active').attr('aria-selected', 'false');
 $('#moduels-for-menu').val(module_id);
         $('#id').val(id);
         $('#Menuname').val(name);

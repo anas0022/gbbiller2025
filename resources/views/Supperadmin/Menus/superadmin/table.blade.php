@@ -126,8 +126,10 @@ $(function () {
             $('#success-span').html((data.message || 'Success!') + '<img src="/images/success/icons/check-mark.png" style="width:20px;margin-left:10px;" />');
             this.reset();
             if (data?.redirect) setTimeout(() => window.location.href = data.redirect, 1200);
-
-            // Reload table
+            setTimeout(() => {
+                $('#success-span').text('')
+            }, 3000);
+            
             window.loadModules();
             $('#icon-preview').html('');
             $('#card-header-text').text('Create Module');

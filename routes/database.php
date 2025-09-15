@@ -19,17 +19,9 @@ if (!defined('STDIN')) {
 }
 
 
-$allowedIp = '127.0.0.1';
 
-Route::middleware(['auth'])->group(function () use ($allowedIp) {
-    Route::group([
-        'middleware' => function ($request, $next) use ($allowedIp) {
-            if ($request->ip() !== $allowedIp) {
-                abort(403, 'Unauthorized access from this IP.');
-            }
-            return $next($request);
-        }
-    ], function () {
+
+
 
 Route::get('/database', function () {
     return view('Supperadmin.database.index');
@@ -836,5 +828,4 @@ return new class extends Migration
         ], 500);
     }
 });
-});
-});
+

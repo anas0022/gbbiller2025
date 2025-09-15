@@ -2,7 +2,8 @@
     style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
     <p>Super Admin Menu</p>
     <button type="button" class="btn btn-primary" id="addmenubtn">
-        Add Menu <i class="fa fa-plus" aria-hidden="true"></i>
+         <i class="fa fa-plus" aria-hidden="true"></i>
+        Add Module
     </button>
 </div>
 @push('modals')

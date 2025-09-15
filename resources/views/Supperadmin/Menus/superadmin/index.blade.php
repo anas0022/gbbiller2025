@@ -26,5 +26,41 @@
                 @include('Supperadmin.Menus.superadmin.table3')
         </div>
     </div>
+    <script>
+       $(document).on('click','#module', function(){
+    $('#tab-eg1-0').addClass('active show');
+$('#tab-eg1-1').removeClass('active show');
+$('#tab-eg1-2').removeClass('active show');
+$('#addmenubtn').text('');
+$('#addmenubtn').html('<i class="fa fa-plus" aria-hidden="true"></i> Add Module');
+
+$('a[href="#tab-eg1-0"]').addClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg1-1"]').removeClass('active').attr('aria-selected', 'true');
+$('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'true');
+       });
+
+
+            $(document).on('click','#menu', function(){
+    $('#tab-eg1-0').removeClass('active show');
+$('#tab-eg1-1').addClass('active show');
+$('#tab-eg1-2').removeClass('active show');
+$('#addmenubtn').text('');
+$('#addmenubtn').html('<i class="fa fa-plus" aria-hidden="true"></i> Add Menu');
+$('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
+$('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'true');
+       });
+                $(document).on('click','#submenu', function(){
+    $('#tab-eg1-0').removeClass('active show');
+$('#tab-eg1-1').removeClass('active show');
+$('#tab-eg1-2').addClass('active show');
+$('#addmenubtn').text('');
+$('#addmenubtn').html('<i class="fa fa-plus" aria-hidden="true"></i> Add SubMenu');
+
+$('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg1-1"]').removeClass('active').attr('aria-selected', 'true');
+$('a[href="#tab-eg1-2"]').addClass('active').attr('aria-selected', 'true');
+       });
+    </script>
 
 @endsection

@@ -152,6 +152,26 @@
                    $('#menuname').val('');
                     $('#sub_route').val('');
                      loadModules();
+                         setTimeout(() => {
+                $('#success-spans2').text('');
+            }, 3000);
+          
+$('#tab-eg1-0').removeClass('active show');
+$('#tab-eg1-1').removeClass('active show');
+$('#tab-eg1-2').addClass('active show');
+$('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg1-1"]').removeClass('active').attr('aria-selected', 'true');
+
+$('a[href="#tab-eg1-2"]').addClass('active').attr('aria-selected', 'false');
+
+$('#tab-eg2-0').removeClass('active show');
+$('#tab-eg2-1').removeClass('active show');
+$('#tab-eg2-2').addClass('active show');
+
+$('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
+$('a[href="#tab-eg2-1"]').removeClass('active').attr('aria-selected', 'true');
+$('a[href="#tab-eg2-2"]').addClass('active').attr('aria-selected', 'false');
+            
         } catch (err) {
             console.error('Form submit error:', err);
             $('#general-error2').text('Something went wrong. Check console / network tab.');

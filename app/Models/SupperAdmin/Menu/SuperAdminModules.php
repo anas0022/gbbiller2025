@@ -6,12 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class SuperAdminModules extends Model
 {
-    protected $table = 'super_admin_modules'; // adjust to your actual table name
+    protected $table = 'super_admin_modules';
 
     protected $fillable = [
         'modulename',
-        'icon'
-        
-
+        'icon',
+        'status'
     ];
+
+    // A module has many menus
+    public function menu()
+    {
+        return $this->hasMany(SuperAdminMenu::class, 'Module_id', 'id')
+            ->select('id', 'Menuname', 'route', 'Module_id');
+    }
+
+    // A module has many submenus through menus (optional)
+    public function submenu()
+    {
+        return $this->hasMany(SuperAdminSubmenu::class, 'menu_module', 'id')
+            ->select('id', 'menuname', 'sub_route', 'menu_module');
+    }
 }
