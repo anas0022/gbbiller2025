@@ -133,6 +133,7 @@
         }, function (res) {
             console.log("Status updated:", res);
             loadModules();
+            loadMenu();
         }).fail(function (xhr, status, err) {
             console.error("Error updating status:", status, err, xhr.responseText);
         });

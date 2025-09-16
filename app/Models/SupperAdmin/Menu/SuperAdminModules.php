@@ -18,7 +18,9 @@ class SuperAdminModules extends Model
     public function menu()
     {
         return $this->hasMany(SuperAdminMenu::class, 'Module_id', 'id')
-            ->select('id', 'Menuname', 'route', 'Module_id');
+            ->select('id', 'Menuname', 'route', 'Module_id')
+            ->where('status','1');
+            ;
     }
 
     // A module has many submenus through menus (optional)

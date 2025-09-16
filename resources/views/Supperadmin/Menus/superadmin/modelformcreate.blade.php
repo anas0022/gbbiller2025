@@ -1,11 +1,28 @@
-<div class="card-header"
-    style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
-    <p>Super Admin Menu</p>
-    <button type="button" class="btn btn-primary" id="addmenubtn">
+
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading" style="width:50%; display:flex; align-items:center;">
+                <div class="page-title-icon">
+                    <i class="fa fa-archive icon-gradient bg-sunny-morning">
+                    </i>
+                </div>
+                <div>Super Admin Menu Creation
+                    
+                </div>
+            </div>
+            <div class="btn-actions-pane-right page-title-heading"
+                style="width:50%; gap:5px; display:flex; justify-content:flex-end;">
+                <div role="group" class="btn-group-sm nav btn-group" style="width:50%; gap:5px; display:flex;">
+                     <button type="button" class="btn btn-primary" id="addmenubtn">
         <i class="fa fa-plus" aria-hidden="true"></i>
         Add Module
     </button>
-</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 @push('modals')
     <div class="modal" tabindex="-1" role="dialog" id="createmenu" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog" role="document">

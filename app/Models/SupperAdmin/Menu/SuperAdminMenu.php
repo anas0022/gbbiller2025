@@ -22,5 +22,6 @@ class SuperAdminMenu extends Model
         return $this->belongsTo(SuperAdminModules::class, 'Module_id', 'id')
             ->select('id', 'modulename', 'icon');
     }
+    
 
 }
