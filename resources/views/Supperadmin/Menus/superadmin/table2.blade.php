@@ -98,7 +98,20 @@
         const $b = $(this);
         const id = $b.data('id');
         const name = $b.data('name');
-        const route = $b.data('icon');
+        const route = $b.data('route');
+      
+if (route) {   // covers undefined, null, and empty string
+     $('#route').removeClass('active');
+        $('#url-menu').removeClass('active');
+        $('#route').removeAttr('disabled');
+         $('#route-button ').removeClass('not-active');
+} else {
+    $('#route').addClass('active');
+        $('#url-menu').addClass('active');
+        $('#route').removeAttr('disabled');
+         $('#route-button ').addClass('not-active');
+}
+
         const module_id = $b.data('module_id');
         $('#createmenu').modal('show');
         $('#card-header-text').text('Edit Menu');
@@ -112,7 +125,7 @@
 
         $('#tab-eg2-0').removeClass('active show');
         $('#tab-eg2-1').addClass('active show');
-        $('#tab-eg2-2').addClass('active show');
+        $('#tab-eg2-2').removeClass('active show');
 
         $('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
         $('a[href="#tab-eg2-1"]').addClass('active').attr('aria-selected', 'true');

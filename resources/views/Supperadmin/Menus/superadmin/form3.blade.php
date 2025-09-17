@@ -170,10 +170,11 @@
             gettingmodule();
             $('#menuname').val('');
             $('#sub_route').val('');
-              loadModules();
+            
             loadsubmenu();
                 loadMenu();
                 loadsideMenu();
+                
             setTimeout(() => {
                 $('#success-spans2').text('');
             }, 3000);
