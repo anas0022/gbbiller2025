@@ -105,7 +105,7 @@ $(document).ready(function () {
                 }
 
                 // ✅ Submenus check
-                let subs = (module.submenu || []).filter(sub => sub.menu_module === menu.id);
+                let subs = (module.submenu || []).filter(sub => sub.menu_id=== menu.id);
                 if (subs.length > 0) {
                     html += `<ul>`;
                     subs.forEach(function (sub) {
@@ -153,7 +153,8 @@ $(document).ready(function () {
     $('#sidebaritems').metisMenu('dispose');
     $('#sidebaritems').html(staticMenu + html);
     $('#sidebaritems').metisMenu();
-},
+}
+,
             error: function (xhr, status, error) {
                 console.error('loadMenu AJAX error:', status, error, xhr.responseText);
             }

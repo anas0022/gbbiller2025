@@ -139,6 +139,8 @@
             loadsubmenu();
                 loadMenu();
                 loadsideMenu();
+                  gettingmenu();
+        gettingmodule();
         }).fail(function (xhr, status, err) {
             console.error("Error updating status:", status, err, xhr.responseText);
         });
@@ -178,6 +180,8 @@
                 loadsideMenu();
                  loadrouteavail();
                     loadroutes();
+                      gettingmenu();
+        gettingmodule();
                 },
                 error: function (xhr) {
                     let msg = 'Error deleting module';

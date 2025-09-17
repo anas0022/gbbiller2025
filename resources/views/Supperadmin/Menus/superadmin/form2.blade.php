@@ -157,6 +157,8 @@ $('#menu-form').on('submit', async function (e) {
             loadsubmenu();
                 loadMenu();
                 loadsideMenu();
+                  gettingmenu();
+        gettingmodule();
             setTimeout(() => {
                 $('#success-spans').text('')
             }, 3000);
