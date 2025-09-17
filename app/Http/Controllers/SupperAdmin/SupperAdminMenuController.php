@@ -19,7 +19,7 @@ class SupperAdminMenuController extends Controller
             $rules = [
                 'Module_id' => 'required',
                 'Menuname' => ['required', 'string', 'max:255'],
-                'route' => [ 'regex:/^\/.+$/', 'max:255'],
+                'route' => [ 'required', 'max:255'],
 
 
             ];

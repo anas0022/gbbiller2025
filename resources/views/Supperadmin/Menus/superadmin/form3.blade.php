@@ -1,3 +1,13 @@
+<div id="no-module-fount2" style=" display:none;">
+    <div style="width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; ">
+    <img src="{{ asset('images/not found/not-found.gif') }}" style="width:200px; height: 200px;"> 
+    <p>No Menu Available Please Add One.</p>
+    <button class="btn btn-primary" id="menu-adding-module-active2">Add Menu</button>
+    
+</div>
+</div>
+
+
 <form action="/superadmin/submenu/create" method="POST" enctype="multipart/form-data" id="submenuform">
     @csrf
     <input type="hidden" name="id" id="id2">
@@ -11,11 +21,15 @@
     </div>
 
 
-    <div class="form-group">
-        <label for="link">Url</label>
-        <input type="text" id="sub_route" name="sub_route" class="form-control" placeholder="e.g. /dashboard">
-        <span class="text-danger error-text sub_route_error" id="sub_route_error"></span>
-    </div>
+
+     <div class="form-group">
+    <label for="route">Url</label>
+    <select id="sub_route" name="sub_route" class="form-control">
+        <option value="">-- Select Route --</option>
+    </select>
+      <span class="text-danger error-text sub_route_error" id="sub_route_error"></span>
+</div>
+
     <div class="form-group">
         <label for="position">Module</label>
         <select name="menu_module" id="moduels-for-submenu" class="form-control">
@@ -53,12 +67,14 @@
                         response.forEach(function (module) {
                             $select.append(
                                 `<option value="${module.id}"> ${module.modulename}</option>`
+                                
                             );
 
 
                         });
                     } else {
                         $select.append(`<option value="">No modules found</option>`);
+                       
                     }
                 },
                 error: function (xhr) {
@@ -81,11 +97,14 @@
                         response.forEach(function (module) {
                             $select.append(
                                 `<option value="${module.id}"> ${module.Menuname}</option>`);
-
+                                $('#no-module-fount2').hide();
+                                $('#submenuform').show();
 
                         });
                     } else {
                         $select.append(`<option value="">No modules found</option>`);
+                          $('#no-module-fount2').show();
+                                $('#submenuform').hide();
                     }
                 },
                 error: function (xhr) {
@@ -151,7 +170,10 @@
             gettingmodule();
             $('#menuname').val('');
             $('#sub_route').val('');
-            loadModules();
+              loadModules();
+            loadsubmenu();
+                loadMenu();
+                loadsideMenu();
             setTimeout(() => {
                 $('#success-spans2').text('');
             }, 3000);
@@ -179,4 +201,48 @@
     });
 
 
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+      window.loadrouteavail = function () {
+    fetch("{{ route('available.routes') }}")
+        .then(response => response.json())
+        .then(data => {
+          
+            let select = document.getElementById("sub_route");
+            select.innerHTML = '<option value="">-- Select Route --</option>'; 
+
+            data.forEach(route => {
+                let option = document.createElement("option");
+                option.value = route.uri;   // ✅ use object property
+                option.textContent = route.name 
+                    ? `${route.uri}`  // show both
+                    : route.uri; 
+
+                select.appendChild(option);
+            });
+        });
+    
+    
+    }
+    loadrouteavail();
+});
+</script>
+<script>
+$('#menu-adding-module-active2').click(function () {
+    $('#tab-eg1-0').removeClass('active show');
+    $('#tab-eg1-1').addClass('active show');
+    $('#tab-eg1-2').removeClass('active show');
+    $('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
+    $('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
+    $('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'false');
+
+    $('#tab-eg2-0').removeClass('active show');
+    $('#tab-eg2-1').addClass('active show');
+    $('#tab-eg2-2').removeClass('active show');
+    $('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
+    $('a[href="#tab-eg2-1"]').addClass('active').attr('aria-selected', 'true');
+    $('a[href="#tab-eg2-2"]').removeClass('active').attr('aria-selected', 'false');
+});
 </script>

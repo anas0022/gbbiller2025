@@ -1,6 +1,6 @@
 <form action="{{ route('superadmin.menus.store') }}" method="POST" enctype="multipart/form-data" id="moduleForm">
     @csrf
-    <input type="hidden" name="id" value="" id="module_id">
+    <input type="hidden" name="id" value="" id="module_ids">
     <span id="success-span" style="color: green; margin-top:10px; display:block;"></span>
 
     <span id="general-errors" style="color: red; margin-bottom: 10px;"></span>

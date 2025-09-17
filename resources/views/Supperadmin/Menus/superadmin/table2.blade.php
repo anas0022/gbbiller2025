@@ -39,47 +39,50 @@
         });
 
         // --- loadModules globally so other scripts can call it ---
-        window.loadModules = function () {
+        window.loadMenu = function () {
             $.ajax({
                 url: '/get-menu/superadmin',
                 method: 'GET',
                 success: function (response) {
-                    table.clear();
+    console.log(response);
+    table.clear();
 
-                    response.forEach(function (module) {
-                        var checked = module.Status == 1 ? 'checked' : '';
+    response.forEach(function (menu) {
+        var checked = menu.Status == 1 ? 'checked' : '';
 
-                        table.row.add({
-                            Icon: `<i class="${module.module.icon} gradient-icon"></i>`,
-                            Menu: module.Menuname,
-                            Module: module.module.modulename,
-                            Route: module.route,
-                            Status: `
-                            <input type="checkbox" class="chkToggle2" 
-                                   data-id="${module.id}"
-                                   data-toggle="toggle"
-                                   data-on="Active" data-off="Inactive"
-                                   data-onstyle="success" data-offstyle="danger" ${checked}>
-                        `,
-                            Action: `
-                            <button class="btn btn-sm btn-primary edit-menu"
-                                    data-id="${module.id}"
-                                    data-name="${module.Menuname}"
-                                    data-icon="${module.route}"
-                                    data-module_id="${module.Module_id}"
-                                    >
-                              Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger delete-btn2" data-id="${module.id}" data-menu="${module.Menuname}">
-                              Delete
-                            </button>
-                        `
-                        });
-                    });
+        table.row.add({
+            Icon: `<i class="${menu.module?.icon || ''} gradient-icon"></i>`,
+            Menu: menu.Menuname,
+            Module: menu.module?.modulename || '',
+            Route: menu.route,
+            Status: `
+                <input type="checkbox" class="chkToggle2" 
+                       data-id="${menu.id}"
+                       data-toggle="toggle"
+                       data-on="Active" data-off="Inactive"
+                       data-onstyle="success" data-offstyle="danger" ${checked}>
+            `,
+            Action: `
+                <button class="btn btn-sm btn-primary edit-menu"
+                        data-id="${menu.id}"
+                        data-name="${menu.Menuname}"
+                        data-route="${menu.route}"
+                        data-module_id="${menu.Module_id}">
+                  Edit
+                </button>
+                <button class="btn btn-sm btn-danger delete-btn2" 
+                        data-id="${menu.id}" 
+                        data-menu="${menu.Menuname}">
+                  Delete
+                </button>
+            `
+        });
+    });
 
-                    table.draw();
+    table.draw();
 
-                    if ($.fn.bootstrapToggle) $('.chkToggle2').bootstrapToggle();
+    if ($.fn.bootstrapToggle) $('.chkToggle2').bootstrapToggle();
+
                 },
                 error: function (xhr, status, error) {
                     console.error('loadModules AJAX error:', status, error, xhr.responseText);
@@ -88,7 +91,7 @@
         };
 
         // 🔹 Call it once on page load
-        loadModules();
+        loadMenu();
     });
     $(document).on('click', '.edit-menu', function () {
 
@@ -132,8 +135,10 @@
             _token: $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content')
         }, function (res) {
             console.log("Status updated:", res);
-            loadModules();
-            loadMenu();
+              loadModules();
+            loadsubmenu();
+                loadMenu();
+                loadsideMenu();
         }).fail(function (xhr, status, err) {
             console.error("Error updating status:", status, err, xhr.responseText);
         });
@@ -167,7 +172,12 @@
                     $('#deleteConfirmModal2').modal('hide');
 
                     // Refresh DataTable
-                    if (window.loadModules) window.loadModules();
+                     loadModules();
+            loadsubmenu();
+                loadMenu();
+                loadsideMenu();
+                 loadrouteavail();
+                    loadroutes();
                 },
                 error: function (xhr) {
                     let msg = 'Error deleting module';

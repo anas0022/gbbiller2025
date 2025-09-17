@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Routes\RoutesListController;
 use App\Models\SupperAdmin\Menu\SuperAdminMenu;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +62,7 @@ Route::middleware(['auth'])->group(function () use ($allowedIp) {
     Route::post('/superadmin/submenu/update-status', [SupperAdminSubMenuController::class, 'updateStatus'])
         ->name('submenu.updateStatus');
     Route::delete('/superadmin/menu/delete-submenu/{id}', [SupperAdminSubMenuController::class, 'deleteMenu'])->name('superadmin.submenus.delete');
+Route::get('/available-routes', [RoutesListController::class, 'getAvailableRoutes'])->name('available.routes');
 
 });
 

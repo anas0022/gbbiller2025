@@ -63,7 +63,7 @@ $(document).ready(function () {
         return window.location.pathname.startsWith(path) ? 'mm-active' : '';
     }
 
-    window.loadMenu = function () {
+    window.loadsideMenu = function () {
         $.ajax({
             url: '/sidebar/menu',
             method: 'GET',
@@ -163,7 +163,7 @@ $(document).ready(function () {
         });
     };
 
-    loadMenu();
+    loadsideMenu();
 });
 </script>
 

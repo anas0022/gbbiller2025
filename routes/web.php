@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan; // ✅ add this
-
+use Illuminate\Support\Facades\Artisan;
 
 require __DIR__ . '/auth.php';
+
 $allowedIp = '127.0.0.1';
+
 Route::middleware(['auth'])->group(function () use ($allowedIp) {
     Route::group([
         'middleware' => function ($request, $next) use ($allowedIp) {
@@ -19,7 +20,13 @@ Route::middleware(['auth'])->group(function () use ($allowedIp) {
         require __DIR__ . '/supperadmin/dasboard.php';
         require __DIR__ . '/supperadmin/menus.php';
         require __DIR__ . '/supperadmin/sidebar.php';
-
-
     });
+
+    // ✅ Only include subscription here
+    Route::prefix('superadmin')
+        ->as('superadmin.')
+        ->middleware(['auth'])
+        ->group(function () {
+            require __DIR__ . '/supperadmin/subscription.php';
+        });
 });

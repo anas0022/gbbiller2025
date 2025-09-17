@@ -128,10 +128,13 @@
                     $('#success-span').text('')
                 }, 3000);
 
-                window.loadModules();
+             loadModules();
+            loadsubmenu();
+                loadMenu();
+                loadingthegetmodules();
                 $('#icon-preview').html('');
                 $('#card-header-text').text('Create Module');
-                $('#module_id').val('');
+                $('#module_ids').val('');
             } catch (err) {
                 console.error('Form submit error:', err);
                 $('#general-errors').text('Something went wrong. Check console / network tab.');
@@ -149,7 +152,8 @@
                 _token: $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content')
             }, function (res) {
                 console.log("Status updated:", res);
-                 loadMenu();
+                 loadsideMenu();
+                 loadingthegetmodules();
             }).fail(function (xhr, status, err) {
                 console.error("Error updating status:", status, err, xhr.responseText);
             });
@@ -164,11 +168,26 @@
 
             $('#createmenu').modal('show');
             $('#card-header-text').text('Edit Module');
-            $('#module_id').val(id);
+            $('#module_ids').val(id);
             $('#module_name').val(name);
             $('#icon').val(icon);
             $('#icon-preview').html(`<i class="${icon}"></i>`);
             $('#success-span').text('');
+            $('#tab-eg1-0').addClass('active show');
+        $('#tab-eg1-1').removeClass('active show');
+        $('#tab-eg1-2').removeClass('active show');
+        $('a[href="#tab-eg1-0"]').addClass('active').attr('aria-selected', 'false');
+        $('a[href="#tab-eg1-1"]').removeClass('active').attr('aria-selected', 'true');
+
+        $('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'false');
+
+        $('#tab-eg2-0').addClass('active show');
+        $('#tab-eg2-1').removeClass('active show');
+        $('#tab-eg2-2').removeClass('active show');
+
+        $('a[href="#tab-eg2-0"]').addClass('active').attr('aria-selected', 'false');
+        $('a[href="#tab-eg2-1"]').removeClass('active').attr('aria-selected', 'true');
+        $('a[href="#tab-eg2-2"]').removeClass('active').attr('aria-selected', 'false');
         });
 
     });
@@ -201,7 +220,12 @@
                     $('#deleteConfirmModal').modal('hide');
 
                     // Refresh DataTable
-                    if (window.loadModules) window.loadModules();
+                    loadModules();
+            loadsubmenu();
+                loadMenu();
+                loadsideMenu();
+                 loadrouteavail();
+                    loadroutes();
                 },
                 error: function (xhr) {
                     let msg = 'Error deleting module';

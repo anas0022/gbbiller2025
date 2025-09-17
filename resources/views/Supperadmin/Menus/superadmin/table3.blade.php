@@ -42,7 +42,7 @@
         });
 
         // --- loadModules globally so other scripts can call it ---
-        window.loadModules = function () {
+        window.loadsubmenu = function () {
             $.ajax({
                 url: '/get-submenu/superadmin',
                 method: 'GET',
@@ -93,7 +93,7 @@
         };
 
         // 🔹 Call it once on page load
-        loadModules();
+        loadsubmenu();
     });
 
     $(document).on('click', '.edit-submenu', function () {
@@ -131,8 +131,8 @@
             _token: $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content')
         }, function (res) {
             console.log("Status updated:", res);
-            loadModules();
-                loadMenu();
+            loadsideMenu();
+        
         }).fail(function (xhr, status, err) {
             console.error("Error updating status:", status, err, xhr.responseText);
         });
@@ -167,6 +167,11 @@
 
                     // Refresh DataTable
                     loadModules();
+            loadsubmenu();
+                loadMenu();
+                loadsideMenu();
+                 loadrouteavail();
+                    loadroutes();
                 },
                 error: function (xhr) {
                     let msg = 'Error deleting module';
