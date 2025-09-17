@@ -67,96 +67,93 @@ $(document).ready(function () {
         $.ajax({
             url: '/sidebar/menu',
             method: 'GET',
-            success: function (response) {
-                let html = "";
+          success: function (response) {
+    let html = "";
 
-                response.forEach(function (module) {
+    response.forEach(function (module) {
+        // ✅ Only render module if it has menus
+        if (module.menu && module.menu.length > 0) {
+            html += `
+                <li>
+                    <a href="${module.route || '#'}">
+                        <i class="metismenu-icon ${module.icon || 'fa fa-box'}"></i>
+                        ${module.modulename}
+                        <i class="metismenu-state-icon fa fa-caret-down"></i>
+                    </a>
+            `;
+
+            html += `<ul>`;
+            module.menu.forEach(function (menu) {
+                if (!menu.route) {
+                    // No route → dummy link
                     html += `
                         <li>
-                            <a href="${module.route || '#'}">
-                                <i class="metismenu-icon ${module.icon || 'fa fa-box'}"></i>
-                                ${module.modulename}
-                                ${module.menu && module.menu.length > 0 ? '<i class="metismenu-state-icon fa fa-caret-down"></i>' : ''}
+                            <a href="#">
+                                <i class="metismenu-icon"></i>${menu.Menuname}
+                                <i class="metismenu-state-icon fa fa-caret-down"></i>
                             </a>
                     `;
+                } else {
+                    // Route exists → clickable link
+                    html += `
+                        <li>
+                            <a href="${menu.route}" class="${isActive(menu.route)}">
+                                <i class="metismenu-icon"></i>${menu.Menuname}
+                                ${menu.submenus && menu.submenus.length > 0 ? '<i class="metismenu-state-icon fa fa-caret-down"></i>' : ''}
+                            </a>
+                    `;
+                }
 
-                    if (module.menu && module.menu.length > 0) {
-                        html += `<ul>`;
-                        module.menu.forEach(function (menu) {
-                          if (menu.route === null || menu.route === "" || menu.route === undefined) {
-   
-    html += `
-        <li>
+                // ✅ Submenus check
+                let subs = (module.submenu || []).filter(sub => sub.menu_module === menu.id);
+                if (subs.length > 0) {
+                    html += `<ul>`;
+                    subs.forEach(function (sub) {
+                        html += `
+                            <li>
+                                <a href="${sub.sub_route}" class="${isActive(sub.sub_route)}">
+                                    <i class="metismenu-icon"></i>${sub.menuname}
+                                </a>
+                            </li>
+                        `;
+                    });
+                    html += `</ul>`;
+                }
+
+                html += `</li>`;
+            });
+            html += `</ul></li>`;
+        }
+    });
+
+    let staticMenu = `
+        <li class="{{ request()->is('superadmin/Create Menu/*') ? 'mm-active' : '' }}">
             <a href="#">
-                <i class="metismenu-icon"></i>${menu.Menuname}
-                
-                 <i class="metismenu-state-icon  fa fa-caret-down"></i>
+                <i class="metismenu-icon fa fa-box"></i>Create Menu
+                <i class="metismenu-state-icon fa fa-caret-down"></i>
             </a>
+            <ul>
+                <li>
+                    <a href="{{ url('/superadmin/Create Menu/superadmin') }}"
+                       class="{{ request()->is('superadmin/Create Menu/superadmin') ? 'mm-active' : '' }}">
+                        <i class="metismenu-icon"></i>Super Admin
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('dashboards-commerce.html') }}"
+                       class="{{ request()->is('dashboards-commerce.html') ? 'mm-active' : '' }}">
+                        <i class="metismenu-icon"></i>Admin
+                    </a>
+                </li>
+            </ul>
+        </li>
     `;
-} else {
-    // Route exists → clickable link
-    html += `
-        <li>
-            <a href="${menu.route}" class="${isActive(menu.route)}">
-                <i class="metismenu-icon"></i>${menu.Menuname}
-                ${menu.submenus && menu.submenus.length > 0 ? '<i class="metismenu-state-icon fa fa-caret-down"></i>' : ''}
-            </a>
-    `;
-}
 
-
-                            // ✅ Find submenus for this menu
-                            let subs = (module.submenu || []).filter(sub => sub.menu_module === menu.id);
-                            if (subs.length > 0) {
-                                html += `<ul>`;
-                                subs.forEach(function (sub) {
-                                    html += `
-                                        <li>
-                                            <a href="${sub.sub_route}" class="${isActive(sub.sub_route)}">
-                                                <i class="metismenu-icon"></i>${sub.menuname}
-                                            </a>
-                                        </li>
-                                    `;
-                                });
-                                html += `</ul>`;
-                            }
-
-                            html += `</li>`;
-                        });
-                        html += `</ul>`;
-                    }
-
-                    html += `</li>`;
-                });
-
-                let staticMenu = `
-                    <li class="{{ request()->is('superadmin/Create Menu/*') ? 'mm-active' : '' }}">
-                        <a href="#">
-                            <i class="metismenu-icon fa fa-box"></i>Create Menu
-                            <i class="metismenu-state-icon fa fa-caret-down"></i>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="{{ url('/superadmin/Create Menu/superadmin') }}"
-                                   class="{{ request()->is('superadmin/Create Menu/superadmin') ? 'mm-active' : '' }}">
-                                    <i class="metismenu-icon"></i>Super Admin
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ url('dashboards-commerce.html') }}"
-                                   class="{{ request()->is('dashboards-commerce.html') ? 'mm-active' : '' }}">
-                                    <i class="metismenu-icon"></i>Admin
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                `;
-
-                // Reset MetisMenu
-                $('#sidebaritems').metisMenu('dispose');
-                $('#sidebaritems').html(staticMenu + html);
-                $('#sidebaritems').metisMenu();
-            },
+    // Reset MetisMenu
+    $('#sidebaritems').metisMenu('dispose');
+    $('#sidebaritems').html(staticMenu + html);
+    $('#sidebaritems').metisMenu();
+},
             error: function (xhr, status, error) {
                 console.error('loadMenu AJAX error:', status, error, xhr.responseText);
             }

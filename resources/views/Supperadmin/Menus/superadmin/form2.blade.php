@@ -117,6 +117,76 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     loadroutes();
 });
+$('#menu-form').on('submit', async function (e) {
+        e.preventDefault();
+        $('#modulename_error, #icon_error, #general-error, #success-spans').text('');
+
+        const formData = new FormData(this);
+        const token = $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content');
+
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+
+            const ct = response.headers.get('content-type') || '';
+            let data = ct.indexOf('application/json') !== -1 ? await response.json() : null;
+
+            if (!response.ok) {
+                if (response.status === 419) {
+                    $('#general-error').text('Session expired or CSRF token mismatch.');
+                } else if (data && data.errors) {
+                    for (const key in data.errors) {
+                        $(`#${key}_error`).text(data.errors[key][0]);
+                    }
+                } else {
+                    $('#general-error').text(data?.message || `Server error: ${response.status}`);
+                }
+                return;
+            }
+
+            // Success
+            $('#success-spans').html((data.message || 'Success!') + '<img src="/images/success/icons/check-mark.png" style="width:20px;margin-left:10px;" />');
+              loadModules();
+            loadsubmenu();
+                loadMenu();
+                loadsideMenu();
+            setTimeout(() => {
+                $('#success-spans').text('')
+            }, 3000);
+            $('#Menuname').val('');
+
+            $('#route').val('');
+
+            $('#moduels-for-menu').val('');
+
+            $('#tab-eg1-0').removeClass('active show');
+            $('#tab-eg1-1').addClass('active show');
+            $('#tab-eg1-2').removeClass('active show');
+            $('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
+            $('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
+
+            $('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'false');
+
+            $('#tab-eg2-0').removeClass('active show');
+            $('#tab-eg2-1').addClass('active show');
+            $('#tab-eg2-2').removeClass('active show');
+
+            $('a[href="#tab-eg2-0"]').removeClass('active').attr('aria-selected', 'false');
+            $('a[href="#tab-eg2-1"]').addClass('active').attr('aria-selected', 'true');
+            $('a[href="#tab-eg2-2"]').removeClass('active').attr('aria-selected', 'false');
+            
+        } catch (err) {
+            console.error('Form submit error:', err);
+            $('#general-error').text('Something went wrong. Check console / network tab.');
+        }
+    });
 </script>
 
 <script>
