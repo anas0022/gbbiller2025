@@ -12,9 +12,9 @@
             </div>
             <div class="btn-actions-pane-right page-title-heading"
                 style="width:50%; gap:5px; display:flex; justify-content:flex-end;">
-                <div role="group" class="btn-group-sm nav btn-group" style="width:50%; gap:5px; display:flex;">
+                <div role="group" class="btn-group-sm nav btn-group" style="width:20%; gap:5px; display:flex;">
                      <button type="button" class="btn btn-primary" id="addmenubtn">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+             <i class="fa fa-folder-open" aria-hidden="true"></i>
         Add Module
     </button>
 
