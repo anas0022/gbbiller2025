@@ -23,17 +23,18 @@
 
 
         $(document).on('click', '#addmenubtn2', function () {
-            var myModal = new bootstrap.Modal(document.getElementById('createmenu'));
+            var myModal = new bootstrap.Modal(document.getElementById('createsub'));
             myModal.show();
+        });
+           document.getElementById('closesubmodel').addEventListener('click', function () {
+            var myModalEl = document.getElementById('createsub');
+            var modal = bootstrap.Modal.getInstance(myModalEl);
+            modal.hide();
         });
 
 
 
-        // when modal opens, set default text = Create Module
-     
-      
-   
-
+    
  
         
     </script>

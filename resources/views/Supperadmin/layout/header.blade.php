@@ -2,7 +2,11 @@
     <div class="app-header__logo">
         <div class="logo-src" style="height:auto;">
             {{-- <img src="{{ asset('images/GB_logo.png') }}" alt="Logo" width="50%"> --}}
-            <img src="{{ asset('images/GBlogo.png') }}" alt="Logo" style=" width:50px;">
+            <img src="{{ asset('images/GBlogo.png') }}" 
+     alt="Logo" 
+     style="width:50px; cursor:pointer;" 
+     onclick="window.location.href='/superadmin/dashboard'">
+
         </div>
         <div class="header__pane ml-auto">
             <div>
