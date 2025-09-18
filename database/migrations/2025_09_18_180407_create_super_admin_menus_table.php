@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
                         $table->integer('Module_id');
             $table->string('Menuname', 255)->unique();
-            $table->string('route', 255)->unique();
+            $table->string('route', 255)->nullable()->unique();
+            $table->integer('status')->nullable()->default('1');
             $table->timestamps();
         });
     }

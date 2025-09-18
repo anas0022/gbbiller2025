@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('super_admin_submenus', function (Blueprint $table) {
             $table->id();
                         $table->string('menuname', 255)->unique();
-            $table->integer('module_id');
+            $table->integer('menu_module');
             $table->integer('menu_id');
-            $table->string('route')->unique();
-            $table->integer('status')->nullable()->default('0');
+            $table->string('sub_route', 255)->unique();
+           $table->integer('Status')->nullable()->default('1');
             $table->timestamps();
         });
     }

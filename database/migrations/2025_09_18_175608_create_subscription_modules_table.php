@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('subscription_modules', function (Blueprint $table) {
             $table->id();
-                        $table->string('Sub_type', 255)->unique();
-            $table->string('Icon', 255)->unique();
             $table->timestamps();
         });
     }
