@@ -1,6 +1,6 @@
 <form action="{{ route('superadmin.subscription.store') }}" method="POST" enctype="multipart/form-data" id="subform">
     @csrf
-    <input type="hidden" name="id" value="" id="module_ids">
+    <input type="hidden" name="id" value="" id="subid">
     <span id="success-span" style="color: green; margin-top:10px; display:block;"></span>
 
     <span id="general-errors" style="color: red; margin-bottom: 10px;"></span>

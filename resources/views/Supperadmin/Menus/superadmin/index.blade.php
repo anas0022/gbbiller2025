@@ -34,7 +34,7 @@
             $('#tab-eg1-1').removeClass('active show');
             $('#tab-eg1-2').removeClass('active show');
             $('#addmenubtn').text('');
-            $('#addmenubtn').html('<i class="fa fa-plus" aria-hidden="true"></i> Add Module');
+            $('#addmenubtn').html('<i class="fa fa-folder-open aria-hidden="true"></i> Add Module');
 
             $('a[href="#tab-eg1-0"]').addClass('active').attr('aria-selected', 'false');
             $('a[href="#tab-eg1-1"]').removeClass('active').attr('aria-selected', 'true');
@@ -47,7 +47,7 @@
             $('#tab-eg1-1').addClass('active show');
             $('#tab-eg1-2').removeClass('active show');
             $('#addmenubtn').text('');
-            $('#addmenubtn').html('<i class="fa fa-plus" aria-hidden="true"></i> Add Menu');
+            $('#addmenubtn').html('<i class="fa fa-folder-open" aria-hidden="true"></i> Add Menu');
             $('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
             $('a[href="#tab-eg1-1"]').addClass('active').attr('aria-selected', 'true');
             $('a[href="#tab-eg1-2"]').removeClass('active').attr('aria-selected', 'true');
@@ -57,7 +57,7 @@
             $('#tab-eg1-1').removeClass('active show');
             $('#tab-eg1-2').addClass('active show');
             $('#addmenubtn').text('');
-            $('#addmenubtn').html('<i class="fa fa-plus" aria-hidden="true"></i> Add SubMenu');
+            $('#addmenubtn').html('<i class="fa fa-folder-open" aria-hidden="true"></i> Add SubMenu');
 
             $('a[href="#tab-eg1-0"]').removeClass('active').attr('aria-selected', 'false');
             $('a[href="#tab-eg1-1"]').removeClass('active').attr('aria-selected', 'true');
