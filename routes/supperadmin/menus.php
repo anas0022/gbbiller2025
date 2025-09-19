@@ -47,10 +47,10 @@ Route::middleware(['auth'])->group(function () use ($allowedIp) {
     Route::delete('/superadmin/menu/delete-menu/{id}', [SupperAdminMenuController::class, 'deleteModule'])->name('superadmin.menus.delete');
 
     Route::get('/get-menu', function () {
-        $menu = SuperAdminMenu::where('Status', 1)
-        ->where('route','')
+        $menu = SuperAdminMenu::where('status', 1)
+        ->where('route',null)
         ->get();
-        ;
+        
         return ($menu);
     });
     Route::post('/superadmin/submenu/create', [SupperAdminSubMenuController::class, 'create_menu'])->name('create.submenu');

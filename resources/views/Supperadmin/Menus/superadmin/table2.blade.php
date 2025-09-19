@@ -48,7 +48,7 @@
     table.clear();
 
     response.forEach(function (menu) {
-        var checked = menu.Status == 1 ? 'checked' : '';
+        var checked = menu.status == 1 ? 'checked' : '';
 
         table.row.add({
             Icon: `<i class="${menu.module?.icon || ''} gradient-icon"></i>`,
