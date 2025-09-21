@@ -1,4 +1,3 @@
-<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="app-wrapper-footer">
     <div class="app-footer">

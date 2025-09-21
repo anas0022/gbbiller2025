@@ -2,10 +2,6 @@
 
 
   <!-- MetisMenu jQuery Plugin -->
-
-
- 
-  <link rel="stylesheet" href="{{ asset('css/test.css') }}">
 <div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
         <div class="logo-src"></div>
@@ -56,7 +52,7 @@
         </div>
     </div>
 </div>
-<script>
+<!-- <script>
 $(document).ready(function () {
     function isActive(path) {
         if (!path) return false;
@@ -71,7 +67,7 @@ $(document).ready(function () {
                 let html = "";
 
                 response.forEach(function (module) {
-                    let moduleActive = false; // track module activity
+                    let moduleActive = false;
 
                     if (module.menu && module.menu.length > 0) {
                         let moduleHtml = `
@@ -85,16 +81,15 @@ $(document).ready(function () {
                         `;
 
                         module.menu.forEach(function (menu) {
-                            let menuActive = false; // track menu activity
+                            let menuActive = false;
                             let subHtml = "";
 
-                            // ✅ Submenus check
                             let subs = (module.submenu || []).filter(sub => sub.menu_id === menu.id);
                             if (subs.length > 0) {
                                 subHtml += `<ul>`;
                                 subs.forEach(function (sub) {
                                     let subActive = isActive(sub.sub_route);
-                                    if (subActive) menuActive = true; // bubble up
+                                    if (subActive) menuActive = true;
                                     subHtml += `
                                         <li>
                                             <a href="${sub.sub_route}" class="${subActive ? 'mm-active' : ''}">
@@ -106,10 +101,8 @@ $(document).ready(function () {
                                 subHtml += `</ul>`;
                             }
 
-                            // ✅ Menu active check (own route OR sub active)
                             if (isActive(menu.route)) menuActive = true;
-
-                            if (menuActive) moduleActive = true; // bubble up to module
+                            if (menuActive) moduleActive = true;
 
                             moduleHtml += `
                                 <li class="${menuActive ? 'mm-active' : ''}">
@@ -124,7 +117,6 @@ $(document).ready(function () {
 
                         moduleHtml += `</ul></li>`;
 
-                        // ✅ Add active class to module if any menu/submenu is active
                         if (moduleActive) {
                             moduleHtml = moduleHtml.replace('<li>', '<li class="mm-active">');
                         }
@@ -133,23 +125,20 @@ $(document).ready(function () {
                     }
                 });
 
-                // ✅ Static Menu (unchanged from your code)
                 let staticMenu = `
-                    <li class="{{ request()->is('superadmin/CreateMenu/*') ? 'mm-active' : '' }}">
+                    <li>
                         <a href="#">
                             <i class="metismenu-icon fa fa-box"></i>Create Menu
                             <i class="metismenu-state-icon fa fa-caret-down"></i>
                         </a>
                         <ul>
                             <li>
-                                <a href="{{ url('/superadmin/CreateMenu/superadmin') }}"
-                                   class="{{ request()->is('superadmin/Create Menu/superadmin') ? 'mm-active' : '' }}">
+                                <a href="{{ url('/superadmin/CreateMenu/superadmin') }}">
                                     <i class="metismenu-icon"></i>Super Admin
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ url('dashboards-commerce.html') }}"
-                                   class="{{ request()->is('dashboards-commerce.html') ? 'mm-active' : '' }}">
+                                <a href="{{ url('dashboards-commerce.html') }}">
                                     <i class="metismenu-icon"></i>Admin
                                 </a>
                             </li>
@@ -157,18 +146,160 @@ $(document).ready(function () {
                     </li>
                 `;
 
-                // ✅ Reset MetisMenu
                 $('#sidebaritems').metisMenu('dispose');
                 $('#sidebaritems').html(staticMenu + html);
                 $('#sidebaritems').metisMenu();
+
+                // ✅ Hide preloader only after menu is ready
+                var preloader = document.querySelector('.preloader');
+                preloader.classList.add('fade-out');
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 500); // match fade-out duration
             },
             error: function (xhr, status, error) {
                 console.error('loadMenu AJAX error:', status, error, xhr.responseText);
+
+                // Even on error, hide preloader
+                var preloader = document.querySelector('.preloader');
+                preloader.classList.add('fade-out');
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 500);
             }
         });
     };
 
-    loadsideMenu();
+    // 🚀 Run menu load when page fully loaded
+    window.addEventListener('load', function () {
+        loadsideMenu();
+    });
 });
-</script>
 
+</script>
+ -->
+
+
+
+
+ <script>
+    $(document).ready(function () {
+    function isActive(path) {
+        if (!path) return false;
+        return window.location.pathname.startsWith(path);
+    }
+
+    window.loadsideMenu = function () {
+        $.ajax({
+            url: '/sidebar/menu',
+            method: 'GET',
+            success: function (response) {
+                let modules = [];
+
+                response.forEach(function (module) {
+                    if (module.menu && module.menu.length > 0) {
+                        let moduleActive = false;
+                        let moduleParts = [];
+
+                        moduleParts.push(`
+                            <li>
+                                <a href="${module.route || '#'}">
+                                    <i class="metismenu-icon ${module.icon || 'fa fa-box'}"></i>
+                                    ${module.modulename}
+                                    <i class="metismenu-state-icon fa fa-caret-down"></i>
+                                </a>
+                                <ul>
+                        `);
+
+                        module.menu.forEach(function (menu) {
+                            let menuActive = false;
+                            let subs = (module.submenu || []).filter(sub => sub.menu_id === menu.id);
+                            let subParts = [];
+
+                            if (subs.length > 0) {
+                                subParts.push(`<ul>`);
+                                subs.forEach(function (sub) {
+                                    let subActive = isActive(sub.sub_route);
+                                    if (subActive) menuActive = true;
+                                    subParts.push(`
+                                        <li>
+                                            <a href="${sub.sub_route}" class="${subActive ? 'mm-active' : ''}">
+                                                <i class="metismenu-icon"></i>${sub.menuname}
+                                            </a>
+                                        </li>
+                                    `);
+                                });
+                                subParts.push(`</ul>`);
+                            }
+
+                            if (isActive(menu.route)) menuActive = true;
+                            if (menuActive) moduleActive = true;
+
+                            moduleParts.push(`
+                                <li class="${menuActive ? 'mm-active' : ''}">
+                                    <a href="${menu.route || '#'}" class="${menuActive ? 'mm-active' : ''}">
+                                        <i class="metismenu-icon"></i>${menu.Menuname}
+                                        ${subs.length > 0 ? '<i class="metismenu-state-icon fa fa-caret-down"></i>' : ''}
+                                    </a>
+                                    ${subParts.join("")}
+                                </li>
+                            `);
+                        });
+
+                        moduleParts.push(`</ul></li>`);
+
+                        if (moduleActive) {
+                            moduleParts[0] = moduleParts[0].replace('<li>', '<li class="mm-active">');
+                        }
+
+                        modules.push(moduleParts.join(""));
+                    }
+                });
+
+                // Static menu
+                let staticMenu = `
+                    <li>
+                        <a href="#">
+                            <i class="metismenu-icon fa fa-box"></i>Create Menu
+                            <i class="metismenu-state-icon fa fa-caret-down"></i>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ url('/superadmin/CreateMenu/superadmin') }}">
+                                    <i class="metismenu-icon"></i>Super Admin
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('dashboards-commerce.html') }}">
+                                    <i class="metismenu-icon"></i>Admin
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                `;
+
+                // ✅ Update DOM once
+                $('#sidebaritems')
+                    .metisMenu('dispose') // reset
+                    .html(staticMenu + modules.join("")) // insert all at once
+                    .metisMenu(); // re-init
+
+                // ✅ Hide preloader after menu is ready
+                var preloader = document.querySelector('.preloader');
+                preloader.classList.add('fade-out');
+                setTimeout(() => preloader.style.display = 'none', 300);
+            },
+            error: function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.classList.add('fade-out');
+                setTimeout(() => preloader.style.display = 'none', 300);
+            }
+        });
+    };
+
+    window.addEventListener('load', function () {
+        loadsideMenu();
+    });
+});
+
+ </script>
