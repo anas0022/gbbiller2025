@@ -135,14 +135,14 @@ $(document).ready(function () {
 
                 // ✅ Static Menu (unchanged from your code)
                 let staticMenu = `
-                    <li class="{{ request()->is('superadmin/Create Menu/*') ? 'mm-active' : '' }}">
+                    <li class="{{ request()->is('superadmin/CreateMenu/*') ? 'mm-active' : '' }}">
                         <a href="#">
                             <i class="metismenu-icon fa fa-box"></i>Create Menu
                             <i class="metismenu-state-icon fa fa-caret-down"></i>
                         </a>
                         <ul>
                             <li>
-                                <a href="{{ url('/superadmin/Create Menu/superadmin') }}"
+                                <a href="{{ url('/superadmin/CreateMenu/superadmin') }}"
                                    class="{{ request()->is('superadmin/Create Menu/superadmin') ? 'mm-active' : '' }}">
                                     <i class="metismenu-icon"></i>Super Admin
                                 </a>

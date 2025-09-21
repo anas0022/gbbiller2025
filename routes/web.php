@@ -23,10 +23,12 @@ Route::middleware(['auth'])->group(function () use ($allowedIp) {
     });
 
     // ✅ Only include subscription here
-    Route::prefix('superadmin')
-        ->as('superadmin.')
-        ->middleware(['auth'])
-        ->group(function () {
-            require __DIR__ . '/supperadmin/subscription.php';
-        });
+   Route::prefix('superadmin')
+    ->as('superadmin.')
+    ->middleware(['auth'])
+    ->group(function () {
+        require __DIR__ . '/supperadmin/subscription.php';
+        require __DIR__ . '/supperadmin/user.php'; // keep only here
+    });
+
 });

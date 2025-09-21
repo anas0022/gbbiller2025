@@ -38,7 +38,7 @@
         // --- loadModules globally so other scripts can call it ---
         window.loadModules = function () {
             $.ajax({
-                url: '/superadmin/Create Menu/menu-table',
+                url: '/superadmin/CreateMenu/menu-table',
                 method: 'GET',
                 success: function (response) {
                     table.clear();
@@ -146,7 +146,7 @@
             const moduleId = $(this).data('id');
             const newStatus = $(this).prop('checked') ? 1 : 0;
 
-            $.post('/superadmin/Create Menu/update-status', {
+            $.post('/superadmin/CreateMenu/update-status', {
                 id: moduleId,
                 status: newStatus,
                 _token: $('input[name="_token"]').val() || $('meta[name="csrf-token"]').attr('content')
