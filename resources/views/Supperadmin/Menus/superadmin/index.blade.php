@@ -18,17 +18,19 @@
         </div>
     </div>
     <div class="tab-content">
-        <div class="tab-pane active" id="tab-eg2-0" role="tabpanel">
+        <div class="tab-pane active" id="tab-eg2-0" role="tabpanel" >
             @include('Supperadmin.Menus.superadmin.table')
         </div>
-        <div class="tab-pane" id="tab-eg2-1" role="tabpanel">
+        <div class="tab-pane" id="tab-eg2-1" role="tabpanel" >
             @include('Supperadmin.Menus.superadmin.table2')
         </div>
-        <div class="tab-pane" id="tab-eg2-2" role="tabpanel">
-            @include('Supperadmin.Menus.superadmin.table3')
+        <div class="tab-pane" id="tab-eg2-2" role="tabpanel" >
+                        @include('Supperadmin.Menus.superadmin.table3')
         </div>
     </div>
     <script>
+      
+
         $(document).on('click', '#module', function () {
             $('#tab-eg1-0').addClass('active show');
             $('#tab-eg1-1').removeClass('active show');

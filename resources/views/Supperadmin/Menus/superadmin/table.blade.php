@@ -81,9 +81,9 @@
             });
         };
 
-        // Initial load + interval refresh
+
         loadModules();
-        setInterval(loadModules, 5000);
+        
 
         // --- Form submit ---
         $('#moduleForm').on('submit', async function (e) {
