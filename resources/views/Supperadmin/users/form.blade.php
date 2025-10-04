@@ -1,99 +1,38 @@
-<form action="{{ route('superadmin.subscription.store') }}" method="POST" enctype="multipart/form-data" id="subform">
+<form action="{{ route('superadmin.user.creating') }}" method="POST" enctype="multipart/form-data" id="userform">
     @csrf
+
     <input type="hidden" name="id" value="" id="subid">
     <span id="success-span" style="color: green; margin-top:10px; display:block;"></span>
 
     <span id="general-errors" style="color: red; margin-bottom: 10px;"></span>
     <div class="form-group">
         <label for="sub">Store Name</label>
-        <input type="text" id="Store" name="Store" class="form-control">
-        <span class="text-danger error-text Store_error" id="Store_error"></span>
+        <input type="text" id="name" name="name" class="form-control">
+        <span class="text-danger error-text name_error" id="name_error"></span>
     </div>
 
-   <!--  <div class="form-group">
-        <label for="sub">Subscription</label>
-        <select type="text" id="Sub_type" name="Sub_type" class="form-control">
-            <option value="">
-                -select subscripi
-            </option>
-        </select>
-        <span class="text-danger error-text Sub_type_error" id="Sub_type_error"></span>
-    </div> -->
 
     <div class="form-group">
-    <label for="logo">Logo</label>
-    <input type="file" id="logo" name="logo" class="form-control" 
-           accept="image/*" onchange="previewLogo(event)">
-    <span class="text-danger error-text icon_error" id="icon_error"></span>
+    <label for="logo">Email</label>
+    <input type="email" id="email" name="email" class="form-control">
+    <span class="text-danger error-text email_error" id="email_error"></span>
 
-    <!-- Preview container -->
-    <div id="logoPreviewContainer" style="margin-top:10px; display:none;">
-        <img id="logoPreview" src="" alt="Logo Preview" 
-             style="max-width: 150px; max-height: 150px; border:1px solid #ccc; border-radius:8px;"/>
-    </div>
+
+   
 </div>
 
-<script>
-function previewLogo(event) {
-    const file = event.target.files[0];
-    const errorEl = document.getElementById("icon_error");
-    const previewContainer = document.getElementById("logoPreviewContainer");
-    const previewImg = document.getElementById("logoPreview");
 
-    // Reset
-    errorEl.textContent = "";
-    previewContainer.style.display = "none";
-    previewImg.src = "";
-
-    if (!file) return;
-
-    // Check file type
-    if (!file.type.startsWith("image/")) {
-        errorEl.textContent = "Only image files are allowed.";
-        event.target.value = ""; // clear input
-        return;
-    }
-
-    // Preview
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        previewImg.src = e.target.result;
-        previewContainer.style.display = "block";
-    };
-    reader.readAsDataURL(file);
-}
-</script>
 
 
     <button type="submit" class="btn btn-primary">Create Module</button>
     <button type="button" class="btn btn-secondary" id="closesubmodel">Close</button>
 </form>
 
-<script>
 
-    // Font Awesome icon preview
-    document.getElementById('icon').addEventListener('input', function () {
-        const preview = document.getElementById('icon-preview');
-        const errorMsg = document.getElementById('icon-error');
-        const className = this.value.trim();
-
-        preview.innerHTML = `<i class="${className}"></i>`;
-        const iconEl = preview.querySelector("i");
-        const style = window.getComputedStyle(iconEl, '::before');
-        const hasIcon = style && style.content !== 'none' && style.content !== '';
-
-        if (hasIcon) {
-            errorMsg.style.display = "none";
-        } else {
-            errorMsg.style.display = "inline";
-        }
-    });
-
-</script>
 
 
 <script>
-$('#subform').on('submit', async function (e) {
+$('#userform').on('submit', async function (e) {
     e.preventDefault();
 
     // Clear previous messages
@@ -130,7 +69,8 @@ $('#subform').on('submit', async function (e) {
                     $(`#${normKey}_error`).text(data.errors[key][0]);
                 });
             } else {
-                $('#general-errors').text(data?.message || `Server error: ${response.status}`);
+                $('#general-errors').text(data?.error || data?.message || `Server error: ${response.status}`);
+
             }
             return;
         }

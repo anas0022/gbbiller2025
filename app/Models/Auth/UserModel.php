@@ -14,6 +14,17 @@ class UserModel extends Authenticatable
     protected $fillable = [
         'biller_code',
         'password',
+        'username',
+        'email',
+        'password',
+        'mobile',
+        'role',
+        'user_type',
+        'store_id',
+        'mobile_code',
+        'plan',
+        'created_by',
+       
         'name', // add other columns as needed
     ];
 
